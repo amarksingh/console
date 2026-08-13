@@ -1,5 +1,6 @@
 const Command = require('./command')
-require('@ostro/support/helpers')
+const { rtrim, trim } = require('@ostro/support/function')
+const StringHelper = require('@ostro/support/string')
 
 class GeneratorCommand extends Command {
 
@@ -168,7 +169,7 @@ class GeneratorCommand extends Command {
             '{{rootNamespace}}': this.userProviderModel(),
             '{{namespacedUserModel}}': this.userProviderModel(),
         };
-        $stub = String.replaceAllArray($stub,
+        $stub = StringHelper.replaceAllArray($stub,
             Object.keys($searches), Object.values($searches)
 
         );
@@ -182,8 +183,8 @@ class GeneratorCommand extends Command {
     }
 
     replaceClass($stub, $name) {
-        let $class = this.getFileName($name).pascal().ucfirst();
-        return String.replaceAll($stub, ['DummyClass', '{{ class }}', '{{class}}'], $class);
+        let $class = StringHelper.ucfirst(StringHelper.pascal(this.getFileName($name)));
+        return StringHelper.replaceAll($stub, ['DummyClass', '{{ class }}', '{{class}}'], $class);
     }
 
     sortImports($stub) {

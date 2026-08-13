@@ -1,3 +1,4 @@
+const { env, unset } = require('@ostro/support/function')
 const Color = require('./color')
 
 class OutputFormatterStyle {

@@ -1,3 +1,4 @@
+const { empty } = require('@ostro/support/function')
 const InvalidArgumentException = require('@ostro/support/exceptions/invalidArgumentException')
 const OutputFormatterStyle = require('./outputFormatterStyle')
 

@@ -1,4 +1,6 @@
-require('@ostro/support/helpers')
+const { isset, strlen, rtrim, str_replace } = require('@ostro/support/function')
+const { lower } = require('@ostro/support/string')
+const InvalidArgumentException = require('@ostro/support/exceptions/invalidArgumentException')
 const OutputFormatterStyle = require('./outputFormatterStyle')
 const OutputFormatterStyleStack = require('./outputFormatterStyleStack')
 
@@ -16,11 +18,11 @@ class OutputFormatter {
     }
 
     static escapeTrailingBackslash($text) {
-        if (str_ends_with($text, '\\')) {
-            $len = strlen($text);
+        if ($text.endsWith('\\')) {
+            let $len = strlen($text);
             $text = rtrim($text, '\\');
             $text = str_replace("\x1b", '', $text);
-            $text += str_repeat("\x1b", $len - strlen($text));
+            $text += "\x1b".repeat($len - strlen($text));
         }
 
         return $text;
@@ -52,11 +54,11 @@ class OutputFormatter {
     }
 
     setStyle($name, $style) {
-        this.$styles[$name.toLowerCase()] = $style;
+        this.$styles[lower($name)] = $style;
     }
 
     hasStyle($name) {
-        return isset(this.$styles[strtolower($name)]);
+        return isset(this.$styles[lower($name)]);
     }
 
     getStyle($name) {
@@ -64,7 +66,7 @@ class OutputFormatter {
             throw new InvalidArgumentException('Undefined style: ' + $name);
         }
 
-        return this.$styles[strtolower($name)];
+        return this.$styles[lower($name)];
     }
 
     format($message) {

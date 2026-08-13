@@ -1,3 +1,4 @@
+const { isset, sprintf, count, env } = require('@ostro/support/function')
 const InvalidArgumentException = require('@ostro/support/exceptions/invalidArgumentException')
 
 class Color {
@@ -41,7 +42,7 @@ class Color {
 
         for (let $option of $options) {
             if (!isset(this.constructor.AVAILABLE_OPTIONS[$option])) {
-                throw new InvalidArgumentException(sprintf('Invalid option specified: "%s". Expected one of (%s).', $option, implode(', ', Object.keys(this.constructor.AVAILABLE_OPTIONS))));
+                throw new InvalidArgumentException(sprintf('Invalid option specified: "%s". Expected one of (%s).', $option, Object.keys(this.constructor.AVAILABLE_OPTIONS).join(', ')));
             }
 
             this.$options[$option] = this.constructor.AVAILABLE_OPTIONS[$option];
@@ -95,17 +96,17 @@ class Color {
         }
 
         if ('#' === $color[0]) {
-            $color = substr($color, 1);
+            $color = $color.substring(1);
 
-            if (3 === strlen($color)) {
-                $color = $color[0].$color[0].$color[1].$color[1].$color[2].$color[2];
+            if (3 === $color.length) {
+                $color = $color[0] + $color[0] + $color[1] + $color[1] + $color[2] + $color[2];
             }
 
-            if (6 !== strlen($color)) {
+            if (6 !== $color.length) {
                 throw new InvalidArgumentException(sprintf('Invalid "%s" color.', $color));
             }
 
-            return ($background ? '4' : '3') + this.convertHexColorToAnsi(hexdec($color));
+            return ($background ? '4' : '3') + this.convertHexColorToAnsi(parseInt($color, 16));
         }
 
         if (isset(this.constructor.COLORS[$color])) {
@@ -132,19 +133,19 @@ class Color {
     }
 
     degradeHexColorToAnsi($r, $g, $b) {
-        if (0 === round(this.getSaturation($r, $g, $b) / 50)) {
+        if (0 === Math.round(this.getSaturation($r, $g, $b) / 50)) {
             return 0;
         }
 
-        return (round($b / 255) << 2) | (round($g / 255) << 1) | round($r / 255);
+        return (Math.round($b / 255) << 2) | (Math.round($g / 255) << 1) | Math.round($r / 255);
     }
 
     getSaturation($r, $g, $b) {
         $r = $r / 255;
         $g = $g / 255;
         $b = $b / 255;
-        $v = max($r, $g, $b);
-        let $diff = $v - min($r, $g, $b)
+        $v = Math.max($r, $g, $b);
+        let $diff = $v - Math.min($r, $g, $b)
         if (0 === $diff) {
             return 0;
         }
