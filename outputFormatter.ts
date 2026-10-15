@@ -20,7 +20,7 @@ class OutputFormatter {
      * @param {*} $text
      * @returns {any}
      */
-    static escape($text) {
+    static escape($text: any) {
         $text = $text.replace('/([^\\\\]?)</', '$1\\<');
 
         return this.escapeTrailingBackslash($text);
@@ -32,7 +32,7 @@ class OutputFormatter {
      * @param {*} $text
      * @returns {any}
      */
-    static escapeTrailingBackslash($text) {
+    static escapeTrailingBackslash($text: any) {
         if ($text.endsWith('\\')) {
             let $len = strlen($text);
             $text = rtrim($text, '\\');
@@ -48,7 +48,7 @@ class OutputFormatter {
      * @param {*} $decorated
      * @param {*} $styles
      */
-    constructor($decorated = false, $styles = []) {
+    constructor($decorated: boolean = false, $styles: any[] = []) {
         this.$decorated = $decorated;
 
         this.setStyle('error', new OutputFormatterStyle('white', 'red'));
@@ -70,7 +70,7 @@ class OutputFormatter {
      * @param {*} $decorated
      * @returns {any}
      */
-    setDecorated($decorated) {
+    setDecorated($decorated: any) {
         this.$decorated = $decorated;
     }
 
@@ -88,7 +88,7 @@ class OutputFormatter {
      * @param {*} $style
      * @returns {any}
      */
-    setStyle($name, $style) {
+    setStyle($name: string, $style: any) {
         this.$styles[lower($name)] = $style;
     }
 
@@ -97,7 +97,7 @@ class OutputFormatter {
      * @param {*} $name
      * @returns {any}
      */
-    hasStyle($name) {
+    hasStyle($name: string) {
         return isset(this.$styles[lower($name)]);
     }
 
@@ -106,7 +106,7 @@ class OutputFormatter {
      * @param {*} $name
      * @returns {any}
      */
-    getStyle($name) {
+    getStyle($name: string) {
         if (!this.hasStyle($name)) {
             throw new InvalidArgumentException('Undefined style: ' + $name);
         }
@@ -119,7 +119,7 @@ class OutputFormatter {
      * @param {*} $message
      * @returns {any}
      */
-    format($message) {
+    format($message: string) {
         return this.formatAndWrap($message, 0);
     }
 
@@ -129,7 +129,7 @@ class OutputFormatter {
      * @param {*} $width
      * @returns {any}
      */
-    formatAndWrap($message, $width) {
+    formatAndWrap($message: string, $width: any) {
         let $offset = 0;
         let $output = '';
         let $tagRegex = '[a-z][^<>]*';
@@ -192,7 +192,7 @@ class OutputFormatter {
      * @param {*} $string
      * @returns {any}
      */
-    createStyleFromString($string) {
+    createStyleFromString($string: any) {
         if (isset(this.$styles[$string])) {
             return this.$styles[$string];
         }
@@ -232,7 +232,7 @@ class OutputFormatter {
      * @param {*} $currentLineLength
      * @returns {any}
      */
-    applyCurrentStyle($text, $current, $width, $currentLineLength) {
+    applyCurrentStyle($text: any, $current: any, $width: any, $currentLineLength: any) {
         if ('' === $text) {
             return '';
         }

@@ -56,7 +56,7 @@ class Command extends implement(CommandContracts, Interaction, CallCommands, Has
      * @param {*} $app
      * @returns {any}
      */
-    setApp($app) {
+    setApp($app: any) {
         this.$app = $app;
     }
 
@@ -65,7 +65,7 @@ class Command extends implement(CommandContracts, Interaction, CallCommands, Has
      * @param {*} $console
      * @returns {any}
      */
-    setConsole($console) {
+    setConsole($console: any) {
         this.$console = $console
     }
 

@@ -26,7 +26,7 @@ class Interaction {
      * @param {*} $name
      * @returns {any}
      */
-    hasArgument($name) {
+    hasArgument($name: string) {
         return this.input.hasArgument($name);
     }
 
@@ -35,7 +35,7 @@ class Interaction {
      * @param {*} $key
      * @returns {any}
      */
-    argument($key = null) {
+    argument($key: any = null) {
         if ($key == null) {
             return this.input.getArguments();
         }
@@ -56,7 +56,7 @@ class Interaction {
      * @param {*} $name
      * @returns {any}
      */
-    hasOption($name) {
+    hasOption($name: string) {
         return this.input.hasOption($name);
     }
 
@@ -65,7 +65,7 @@ class Interaction {
      * @param {*} $key
      * @returns {any}
      */
-    option($key = null) {
+    option($key: any = null) {
         if ($key == null) {
             return this.input.getOption();
         }
@@ -86,7 +86,7 @@ class Interaction {
      * @param {*} $default
      * @returns {any}
      */
-    confirm($question, $default = false) {
+    confirm($question: any, $default: boolean = false) {
         return this.output.confirm($question, $default);
     }
 
@@ -96,7 +96,7 @@ class Interaction {
      * @param {*} $default
      * @returns {any}
      */
-    ask($question, $default = null) {
+    ask($question: any, $default: any = null) {
         return this.output.ask($question, $default);
     }
 
@@ -107,7 +107,7 @@ class Interaction {
      * @param {*} $default
      * @returns {any}
      */
-    anticipate($question, $choices, $default = null) {
+    anticipate($question: any, $choices: any, $default: any = null) {
         return this.askWithCompletion($question, $choices, $default);
     }
 
@@ -119,7 +119,7 @@ class Interaction {
      * @param {*} $columnStyles
      * @returns {any}
      */
-    table($headers, $rows, $tableStyle = 'default', $columnStyles = []) {
+    table($headers: Record<string, any>, $rows: any, $tableStyle: string = 'default', $columnStyles: any[] = []) {
         let $table = new Table(this.output);
 
         if ($rows instanceof CollectionInterface) {
@@ -142,7 +142,7 @@ class Interaction {
      * @param {*} $verbosity
      * @returns {any}
      */
-    info($string, $verbosity = null) {
+    info($string: any, $verbosity: any = null) {
         return this.line($string, 'info', $verbosity);
     }
 
@@ -153,7 +153,7 @@ class Interaction {
      * @param {*} $verbosity
      * @returns {any}
      */
-    line($string, $style = null, $verbosity = null) {
+    line($string: any, $style: any = null, $verbosity: any = null) {
         let $styled = $style ? `<${$style}>${$string}</${$style}>` : $string;
 
         return this.output.writeln($styled, this.parseVerbosity($verbosity));
@@ -165,7 +165,7 @@ class Interaction {
      * @param {*} $verbosity
      * @returns {any}
      */
-    comment($string, $verbosity = null) {
+    comment($string: any, $verbosity: any = null) {
         return this.line($string, 'comment', $verbosity);
     }
 
@@ -175,7 +175,7 @@ class Interaction {
      * @param {*} $verbosity
      * @returns {any}
      */
-    question($string, $verbosity = null) {
+    question($string: any, $verbosity: any = null) {
         return this.output.question($string, $verbosity);
     }
 
@@ -185,7 +185,7 @@ class Interaction {
      * @param {*} $verbosity
      * @returns {any}
      */
-    error($string, $verbosity = null) {
+    error($string: any, $verbosity: any = null) {
         return this.line($string, 'error', $verbosity);
     }
 
@@ -195,7 +195,7 @@ class Interaction {
      * @param {*} $verbosity
      * @returns {any}
      */
-    success($string, $verbosity = null) {
+    success($string: any, $verbosity: any = null) {
         return this.line($string, 'success', $verbosity);
     }
 
@@ -205,7 +205,7 @@ class Interaction {
      * @param {*} $verbosity
      * @returns {any}
      */
-    warn($string, $verbosity = null) {
+    warn($string: any, $verbosity: any = null) {
         if (!this.output.getFormatter().hasStyle('warning')) {
             $style = new OutputFormatterStyle('yellow');
 
@@ -220,7 +220,7 @@ class Interaction {
      * @param {*} $string
      * @returns {any}
      */
-    alert($string) {
+    alert($string: any) {
         $length = $string + 12;
 
         this.comment($string.replace('*', $length));
@@ -235,7 +235,7 @@ class Interaction {
      * @param {*} $count
      * @returns {any}
      */
-    newLine($count = 1) {
+    newLine($count: number = 1) {
         return this.output.newLine($count);
     }
 
@@ -244,7 +244,7 @@ class Interaction {
      * @param {*} $input
      * @returns {any}
      */
-    setInput($input) {
+    setInput($input: any) {
         return this.input = $input;
     }
 
@@ -253,7 +253,7 @@ class Interaction {
      * @param {*} $output
      * @returns {any}
      */
-    setOutput($output) {
+    setOutput($output: any) {
         return this.output = $output;
     }
 
@@ -278,7 +278,7 @@ class Interaction {
      * @param {*} $level
      * @returns {any}
      */
-    setVerbosity($level) {
+    setVerbosity($level: any) {
         return this.verbosity = this.parseVerbosity($level);
     }
 
@@ -287,7 +287,7 @@ class Interaction {
      * @param {*} $level
      * @returns {any}
      */
-    parseVerbosity($level = null) {
+    parseVerbosity($level: any = null) {
         if ($level && isset(this.$verbosityMap[$level])) {
             $level = this.$verbosityMap[$level];
         } else if (!Number.isInteger($level)) {

@@ -24,7 +24,7 @@ class OutputFormatterStyle {
      * @param {*} $background
      * @param {*} $options
      */
-    constructor($foreground = null, $background = null, $options = []) {
+    constructor($foreground: any = null, $background: any = null, $options: any[] = []) {
         this.$foreground = $foreground || '';
         this.$background = $background || '';
         this.$color = new Color(this.$foreground, this.$background, this.$options = $options);
@@ -35,7 +35,7 @@ class OutputFormatterStyle {
      * @param {*} $color
      * @returns {any}
      */
-    setForeground($color = null) {
+    setForeground($color: any = null) {
         this.$color = new Color(this.$foreground = $color || '', this.$background, this.$options);
     }
 
@@ -44,7 +44,7 @@ class OutputFormatterStyle {
      * @param {*} $color
      * @returns {any}
      */
-    setBackground($color = null) {
+    setBackground($color: any = null) {
         this.$color = new Color(this.$foreground, this.$background = $color || '', this.$options);
     }
 
@@ -53,7 +53,7 @@ class OutputFormatterStyle {
      * @param {*} $url
      * @returns {any}
      */
-    setHref($url) {
+    setHref($url: string) {
         this.$href = $url;
     }
 
@@ -62,7 +62,7 @@ class OutputFormatterStyle {
      * @param {*} $option
      * @returns {any}
      */
-    setOption($option) {
+    setOption($option: any) {
         this.$options.push($option);
         this.$color = new Color(this.$foreground, this.$background, this.$options);
     }
@@ -72,7 +72,7 @@ class OutputFormatterStyle {
      * @param {*} $option
      * @returns {any}
      */
-    unsetOption($option) {
+    unsetOption($option: any) {
         let $pos = this.$options.indexOf($option);
         if (false !== $pos) {
             unset(this.$options[$pos]);
@@ -86,7 +86,7 @@ class OutputFormatterStyle {
      * @param {*} $options
      * @returns {any}
      */
-    setOptions($options) {
+    setOptions($options: Record<string, any>) {
         this.$color = new Color(this.$foreground, this.$background, this.$options = $options);
     }
 
@@ -95,7 +95,7 @@ class OutputFormatterStyle {
      * @param {*} $text
      * @returns {any}
      */
-    apply($text) {
+    apply($text: any) {
 
         if (null === this.$handlesHrefGracefully) {
             this.$handlesHrefGracefully = 'JetBrains-JediTerm' !== env('TERMINAL_EMULATOR') &&

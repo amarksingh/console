@@ -16,7 +16,7 @@ class OutputHandler {
      * @param {*} $decorated
      * @param {*} $formatter
      */
-    constructor($verbosity = OutputInterface.VERBOSITY_NORMAL, $decorated = true, $formatter = null) {
+    constructor($verbosity: any = OutputInterface.VERBOSITY_NORMAL, $decorated: boolean = true, $formatter: any = null) {
         this.$verbosity = $verbosity || OutputInterface.VERBOSITY_NORMAL;
         this.$formatter = $formatter || new OutputFormatter();
         this.$formatter.setDecorated($decorated);
@@ -27,7 +27,7 @@ class OutputHandler {
      * @param {*} $formatter
      * @returns {any}
      */
-    setFormatter($formatter) {
+    setFormatter($formatter: any) {
         this.$formatter = $formatter;
     }
 
@@ -44,7 +44,7 @@ class OutputHandler {
      * @param {*} $decorated
      * @returns {any}
      */
-    setDecorated($decorated) {
+    setDecorated($decorated: any) {
         this.$formatter.setDecorated($decorated);
     }
 
@@ -61,7 +61,7 @@ class OutputHandler {
      * @param {*} $level
      * @returns {any}
      */
-    setVerbosity($level) {
+    setVerbosity($level: any) {
         this.$verbosity = $level;
     }
 
@@ -111,7 +111,7 @@ class OutputHandler {
      * @param {*} $options
      * @returns {any}
      */
-    writeln($messages, $options = OutputInterface.OUTPUT_NORMAL) {
+    writeln($messages: any, $options: Record<string, any> = OutputInterface.OUTPUT_NORMAL) {
         return this.write($messages, true, $options);
     }
 
@@ -122,7 +122,7 @@ class OutputHandler {
      * @param {*} $options
      * @returns {any}
      */
-    write($messages, $newline = false, $options = OutputInterface.OUTPUT_NORMAL) {
+    write($messages: any, $newline: boolean = false, $options: Record<string, any> = OutputInterface.OUTPUT_NORMAL) {
 
         if (!Array.isArray($messages)) {
             $messages = [$messages];
@@ -160,7 +160,7 @@ class OutputHandler {
      * @param {*} $count
      * @returns {any}
      */
-    newLine($count = 1) {
+    newLine($count: number = 1) {
         let $message = '\n'.repeat($count)
         process.stdout.write($message)
         return this
@@ -172,7 +172,7 @@ class OutputHandler {
      * @param {*} $default
      * @returns {any}
      */
-    confirm($question, $default = false) {
+    confirm($question: any, $default: boolean = false) {
         return this.question($question).then(res => {
             if (res.toLowerCase() == 'y') {
                 return $default || true
@@ -188,7 +188,7 @@ class OutputHandler {
      * @param {*} $default
      * @returns {any}
      */
-    ask($question, $default = null) {
+    ask($question: any, $default: any = null) {
         return this.output.ask($question, $default);
     }
 
@@ -197,7 +197,7 @@ class OutputHandler {
      * @param {*} $question
      * @returns {any}
      */
-    question($question) {
+    question($question: any) {
         return new Promise((resolve, reject) => {
             const readline = require('readline').createInterface({
                 input: process.stdin,
@@ -217,7 +217,7 @@ class OutputHandler {
      * @param {*} $newline
      * @returns {any}
      */
-    doWrite($message, $newline) {
+    doWrite($message: string, $newline: any) {
         process.stdout.write(Buffer.from($message))
         if ($newline)
             this.newLine()

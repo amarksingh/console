@@ -11,7 +11,7 @@ class OutputFormatterStyleStack {
      * Create a new instance.
      * @param {*} $emptyStyle
      */
-    constructor($emptyStyle = null) {
+    constructor($emptyStyle: any = null) {
         this.$emptyStyle = $emptyStyle || new OutputFormatterStyle();
         this.$styles = [];
     }
@@ -29,7 +29,7 @@ class OutputFormatterStyleStack {
      * @param {*} $style
      * @returns {any}
      */
-    push($style) {
+    push($style: any) {
         this.$styles.push($style);
     }
 
@@ -38,7 +38,7 @@ class OutputFormatterStyleStack {
      * @param {*} $style
      * @returns {any}
      */
-    pop($style = null) {
+    pop($style: any = null) {
         if (empty(this.$styles)) {
             return this.$emptyStyle;
         }
@@ -77,7 +77,7 @@ class OutputFormatterStyleStack {
      * @param {*} $emptyStyle
      * @returns {any}
      */
-    setEmptyStyle($emptyStyle) {
+    setEmptyStyle($emptyStyle: any) {
         this.$emptyStyle = $emptyStyle;
 
         return this;

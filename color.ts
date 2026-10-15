@@ -45,7 +45,7 @@ class Color {
      * @param {*} $background
      * @param {*} $options
      */
-    constructor($foreground = '', $background = '', $options = []) {
+    constructor($foreground: string = '', $background: string = '', $options: any[] = []) {
         this.$foreground = this.parseColor($foreground);
         this.$background = this.parseColor($background, true);
 
@@ -63,7 +63,7 @@ class Color {
      * @param {*} $text
      * @returns {any}
      */
-    apply($text) {
+    apply($text: any) {
         return this.set() + $text + this.unset();
     }
 
@@ -118,7 +118,7 @@ class Color {
      * @param {*} $background
      * @returns {any}
      */
-    parseColor($color, $background = false) {
+    parseColor($color: any, $background: boolean = false) {
         if ('' === $color) {
             return '';
         }
@@ -153,7 +153,7 @@ class Color {
      * @param {*} $color
      * @returns {any}
      */
-    convertHexColorToAnsi($color) {
+    convertHexColorToAnsi($color: any) {
         let $r = ($color >> 16) & 255;
         let $g = ($color >> 8) & 255;
         let $b = $color & 255;
@@ -172,7 +172,7 @@ class Color {
      * @param {*} $b
      * @returns {any}
      */
-    degradeHexColorToAnsi($r, $g, $b) {
+    degradeHexColorToAnsi($r: any, $g: any, $b: any) {
         if (0 === Math.round(this.getSaturation($r, $g, $b) / 50)) {
             return 0;
         }
@@ -187,7 +187,7 @@ class Color {
      * @param {*} $b
      * @returns {any}
      */
-    getSaturation($r, $g, $b) {
+    getSaturation($r: any, $g: any, $b: any) {
         $r = $r / 255;
         $g = $g / 255;
         $b = $b / 255;

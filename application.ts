@@ -18,7 +18,7 @@ class Application {
      * Create a new instance.
      * @param {*} $app
      */
-    constructor($app) {
+    constructor($app: any) {
         this.$app = $app;
         this.setAutoExit(0);
         commander.exitOverride(()=>{});
@@ -32,7 +32,7 @@ class Application {
      * @param {*} status
      * @returns {any}
      */
-    setAutoExit(status) {
+    setAutoExit(status: boolean) {
         process.exitCode = status
     }
 
@@ -49,7 +49,7 @@ class Application {
      * @param {*} $input
      * @returns {any}
      */
-    run($input = []) {
+    run($input: any[] = []) {
         return commander.parseAsync($input, {
             from: 'user'
         })
@@ -62,7 +62,7 @@ class Application {
      * @param {*} $arguments
      * @returns {any}
      */
-    call($command, $arguments = []) {
+    call($command: any, $arguments: any[] = []) {
         $command = this.parseCommand($command);
         $command = $command.slice(0, 1);
         const commandArguments = $command.slice(1, $command.length)
@@ -82,7 +82,7 @@ class Application {
      * @param {*} $arguments
      * @returns {any}
      */
-    createInputFromArguments($arguments) {
+    createInputFromArguments($arguments: any) {
         if (Array.isArray($arguments)) {
             return $arguments.map(arg => this.createInputFromArguments(arg))
         }
@@ -117,7 +117,7 @@ class Application {
      * @param {*} $command
      * @returns {any}
      */
-    has($command) {
+    has($command: any) {
         return this.$commands.includes($command[0])
     }
 
@@ -126,7 +126,7 @@ class Application {
      * @param {*} $input
      * @returns {any}
      */
-    getCommandName($input) {
+    getCommandName($input: any) {
         let $command = this.getCommand($input)._
         return $command.length ? $command[0] : ''
     }
@@ -146,7 +146,7 @@ class Application {
      * @param {*} $command
      * @returns {any}
      */
-    parseCommand($command) {
+    parseCommand($command: any) {
         return parseArgsStringToArgv($command)
     }
 
@@ -155,7 +155,7 @@ class Application {
      * @param {*} $command
      * @returns {any}
      */
-    resolve($command) {
+    resolve($command: any) {
         return this.add(this.$app.make($command));
     }
 
@@ -164,7 +164,7 @@ class Application {
      * @param {*} $commands
      * @returns {any}
      */
-    resolveCommands($commands) {
+    resolveCommands($commands: any) {
 
         if (Array.isArray($commands)) {
             for (let $command of $commands) {
@@ -187,7 +187,7 @@ class Application {
      * @param {*} callback
      * @returns {any}
      */
-    static addBootstraper(callback) {
+    static addBootstraper(callback: Function) {
         this.$bootstrappers.push(callback)
     }
 
@@ -204,7 +204,7 @@ class Application {
      * @param {*} arg
      * @returns {any}
      */
-    parseArgument(arg) {
+    parseArgument(arg: any) {
         if (Array.isArray(arg)) {
             const [key, value] = arg;
             return { key, value };
@@ -224,7 +224,7 @@ class Application {
      * @param {*} command
      * @returns {any}
      */
-    add(command) {
+    add(command: any) {
         if (command instanceof Command != true) {
             throw new Error(`Instance of [@ostro/console/command] was not available on [${command.constructor.name}]`)
         }

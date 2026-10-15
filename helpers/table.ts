@@ -12,7 +12,7 @@ class Table {
      * Create a new instance.
      * @param {*} output
      */
-    constructor(output) {
+    constructor(output: any) {
         this.output = output
     }
 
@@ -21,7 +21,7 @@ class Table {
      * @param {*} headers
      * @returns {any}
      */
-    setHeaders(headers) {
+    setHeaders(headers: Record<string, any>) {
     	this[kHeaders] = headers
         return this
     }
@@ -31,7 +31,7 @@ class Table {
      * @param {*} rows
      * @returns {any}
      */
-    setRows(rows) {
+    setRows(rows: any) {
     	this[kRows] = rows
         return this
     }
@@ -41,7 +41,7 @@ class Table {
      * @param {*} style
      * @returns {any}
      */
-    setStyle(style) {
+    setStyle(style: any) {
     	this[kStyle] = style
         return this
     }
@@ -51,7 +51,7 @@ class Table {
      * @param {*} style
      * @returns {any}
      */
-    setColumnStyle(style) {
+    setColumnStyle(style: any) {
     	this[kColumStyle] = style
     }
 
