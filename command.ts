@@ -1,15 +1,19 @@
-const Argument = require('./argument')
-const Option = require('./option')
-const CommandContracts = require('@ostro/contracts/console/command')
-const { implement } = require('@ostro/support/function')
-const Interaction = require('./concerns/intraction')
-const HasParameters = require('./concerns/hasParameters')
-const CallCommands = require('./concerns/callsCommands')
+import type { ICommand } from '@ostro/contracts/console/command';
+
+const Argument = require('./argument');
+const Option = require('./option');
+const CommandContracts = require('@ostro/contracts/console/command');
+const { implement } = require('@ostro/support/function');
+const Interaction = require('./concerns/intraction');
+const HasParameters = require('./concerns/hasParameters');
+const CallCommands = require('./concerns/callsCommands');
 
 /**
  * Class Command.
  */
-class Command extends implement(CommandContracts, Interaction, CallCommands, HasParameters) {
+class Command extends implement(CommandContracts, Interaction, CallCommands, HasParameters) implements ICommand {
+    $app: any;
+    $console: any;
 
     get $signature() {
         throw Error('$signature must be defined')
