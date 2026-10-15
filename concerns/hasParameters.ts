@@ -1,5 +1,12 @@
+/**
+ * Class HasParameters.
+ */
 class HasParameters {
 
+    /**
+     * specifyParameters method.
+     * @returns {any}
+     */
     specifyParameters() {
 
         for (let $arguments of this.getArguments()) {
@@ -19,10 +26,18 @@ class HasParameters {
         }
     }
 
+    /**
+     * getArguments method.
+     * @returns {any}
+     */
     getArguments() {
         return {};
     }
 
+    /**
+     * getOptions method.
+     * @returns {any}
+     */
     getOptions() {
         return {};
     }

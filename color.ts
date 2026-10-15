@@ -1,6 +1,9 @@
 const { isset, sprintf, count, env } = require('@ostro/support/function')
 const InvalidArgumentException = require('@ostro/support/exceptions/invalidArgumentException')
 
+/**
+ * Class Color.
+ */
 class Color {
 
     static COLORS = {
@@ -36,6 +39,12 @@ class Color {
 
     $options =  {};
 
+    /**
+     * Create a new instance.
+     * @param {*} $foreground
+     * @param {*} $background
+     * @param {*} $options
+     */
     constructor($foreground = '', $background = '', $options = []) {
         this.$foreground = this.parseColor($foreground);
         this.$background = this.parseColor($background, true);
@@ -49,10 +58,19 @@ class Color {
         }
     }
 
+    /**
+     * apply method.
+     * @param {*} $text
+     * @returns {any}
+     */
     apply($text) {
         return this.set() + $text + this.unset();
     }
 
+    /**
+     * set method.
+     * @returns {any}
+     */
     set() {
         let $setCodes = [];
         if ('' !== this.$foreground) {
@@ -72,6 +90,10 @@ class Color {
         return sprintf("\x1b[%sm", $setCodes.join(';'));
     }
 
+    /**
+     * unset method.
+     * @returns {any}
+     */
     unset() {
         let $unsetCodes = [];
         if ('' !== this.$foreground) {
@@ -90,6 +112,12 @@ class Color {
         return sprintf("\x1b[%sm", $unsetCodes.join(';'));
     }
 
+    /**
+     * parseColor method.
+     * @param {*} $color
+     * @param {*} $background
+     * @returns {any}
+     */
     parseColor($color, $background = false) {
         if ('' === $color) {
             return '';
@@ -120,6 +148,11 @@ class Color {
         throw new InvalidArgumentException(sprintf('Invalid "%s" color; expected one of (%s).', $color, Object.keys(this.constructor.COLORS).concat(Object.keys(this.constructor.BRIGHT_COLORS)).join(',')));
     }
 
+    /**
+     * convertHexColorToAnsi method.
+     * @param {*} $color
+     * @returns {any}
+     */
     convertHexColorToAnsi($color) {
         let $r = ($color >> 16) & 255;
         let $g = ($color >> 8) & 255;
@@ -132,6 +165,13 @@ class Color {
         return sprintf('8;2;%d;%d;%d', $r, $g, $b);
     }
 
+    /**
+     * degradeHexColorToAnsi method.
+     * @param {*} $r
+     * @param {*} $g
+     * @param {*} $b
+     * @returns {any}
+     */
     degradeHexColorToAnsi($r, $g, $b) {
         if (0 === Math.round(this.getSaturation($r, $g, $b) / 50)) {
             return 0;
@@ -140,6 +180,13 @@ class Color {
         return (Math.round($b / 255) << 2) | (Math.round($g / 255) << 1) | Math.round($r / 255);
     }
 
+    /**
+     * getSaturation method.
+     * @param {*} $r
+     * @param {*} $g
+     * @param {*} $b
+     * @returns {any}
+     */
     getSaturation($r, $g, $b) {
         $r = $r / 255;
         $g = $g / 255;

@@ -2,6 +2,9 @@ const Command = require('./command')
 const { rtrim, trim } = require('@ostro/support/function')
 const StringHelper = require('@ostro/support/string')
 
+/**
+ * Class GeneratorCommand.
+ */
 class GeneratorCommand extends Command {
 
     $file;
@@ -51,12 +54,21 @@ class GeneratorCommand extends Command {
         this.createArgument('name', 'The name of the migration').required()
     ];
 
+    /**
+     * Create a new instance.
+     * @param {*} $files
+     */
     constructor($files) {
         super()
 
         this.$file = $files;
     }
 
+    /**
+     * handle method.
+     * @async
+     * @returns {any}
+     */
     async handle() {
         let $name = this.getNameInput()
 
@@ -88,6 +100,11 @@ class GeneratorCommand extends Command {
 
     }
 
+    /**
+     * qualifyClass method.
+     * @param {*} $name
+     * @returns {any}
+     */
     qualifyClass($name) {
         $name = $name.trim()
         let $rootNamespace = this.rootNamespace();
@@ -100,10 +117,20 @@ class GeneratorCommand extends Command {
         );
     }
 
+    /**
+     * getDefaultNamespace method.
+     * @param {*} $rootNamespace
+     * @returns {any}
+     */
     getDefaultNamespace($rootNamespace) {
         return $rootNamespace;
     }
 
+    /**
+     * qualifyModel method.
+     * @param {*} $model
+     * @returns {any}
+     */
     qualifyModel($model) {
         $model = ltrim($model, '/');
 
@@ -118,10 +145,20 @@ class GeneratorCommand extends Command {
             path.join($rootNamespace, $model);
     }
 
+    /**
+     * alreadyExists method.
+     * @param {*} $rawName
+     * @returns {any}
+     */
     alreadyExists($rawName) {
         return this.$file.exists($rawName)
     }
 
+    /**
+     * getFileName method.
+     * @param {*} $name
+     * @returns {any}
+     */
     getFileName($name) {
         $name = path.normalize($name)
         let lastSlash = $name.lastIndexOf(path.sep)
@@ -129,23 +166,45 @@ class GeneratorCommand extends Command {
         return String.trim($name.slice(lastSlash, $name.length), path.sep)
     }
 
+    /**
+     * getPath method.
+     * @param {*} $name
+     * @returns {any}
+     */
     getPath($name) {
         let $class = this.getFileName($name).camelCase()
         let namespace = this.getNamespace($name).replace(this.rootNamespace(), '')
         return this.rootNamespace(path.join(namespace, $class + ".js"))
     }
 
+    /**
+     * makeDirectory method.
+     * @async
+     * @param {*} $path
+     * @returns {any}
+     */
     async makeDirectory($path) {
         await this.$file.makeDirectory(dirname($path), 0o755, true, true);
 
         return $path;
     }
 
+    /**
+     * resolveStubPath method.
+     * @param {*} $stub
+     * @returns {any}
+     */
     resolveStubPath($stub) {
         let $customPath = this.$app.basePath(String.trim($stub, '/'))
         return this.$file.exists($customPath).then($exists => ($exists ? $customPath : path.join(this.$dirname, $stub)))
     }
 
+    /**
+     * buildClass method.
+     * @async
+     * @param {*} $name
+     * @returns {any}
+     */
     async buildClass($name) {
         let $stub = await this.getStub()
         return this.$file.get($stub)
@@ -157,6 +216,12 @@ class GeneratorCommand extends Command {
 
     }
 
+    /**
+     * replaceNamespace method.
+     * @param {*} $stub
+     * @param {*} $name
+     * @returns {any}
+     */
     replaceNamespace($stub, $name) {
         let $searches = {
             'DummyNamespace': this.getNamespace($name),
@@ -177,28 +242,57 @@ class GeneratorCommand extends Command {
         return $stub;
     }
 
+    /**
+     * getNamespace method.
+     * @param {*} $name
+     * @returns {any}
+     */
     getNamespace($name) {
         $name = path.normalize($name)
         return rtrim($name.slice(0, $name.lastIndexOf(path.sep)), path.sep);
     }
 
+    /**
+     * replaceClass method.
+     * @param {*} $stub
+     * @param {*} $name
+     * @returns {any}
+     */
     replaceClass($stub, $name) {
         let $class = StringHelper.ucfirst(StringHelper.pascal(this.getFileName($name)));
         return StringHelper.replaceAll($stub, ['DummyClass', '{{ class }}', '{{class}}'], $class);
     }
 
+    /**
+     * sortImports method.
+     * @param {*} $stub
+     * @returns {any}
+     */
     sortImports($stub) {
         return $stub;
     }
 
+    /**
+     * getNameInput method.
+     * @returns {any}
+     */
     getNameInput() {
         return trim(this.argument('name'));
     }
 
+    /**
+     * rootNamespace method.
+     * @param {*} $path
+     * @returns {any}
+     */
     rootNamespace($path) {
         return this.$app.basePath($path);
     }
 
+    /**
+     * userProviderModel method.
+     * @returns {any}
+     */
     userProviderModel() {
         let $config = this.$app['config'];
 
@@ -207,12 +301,22 @@ class GeneratorCommand extends Command {
         return $config.get(`auth.providers.${$provider}.model`);
     }
 
+    /**
+     * isReservedName method.
+     * @param {*} $name
+     * @returns {any}
+     */
     isReservedName($name) {
         $name = $name.toLowerCase();
 
         return this.$reservedNames.indexOf($name) > -1;
     }
 
+    /**
+     * viewPath method.
+     * @param {*} $path
+     * @returns {any}
+     */
     viewPath($path = '') {
         $views = this.$app['config']['view.paths'][0] || resource_path('views');
 

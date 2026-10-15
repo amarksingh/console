@@ -3,6 +3,9 @@ const OutputInterface = require('../outputInterface')
 const CollectionInterface = require('@ostro/contracts/collection/collect')
 const Table = require('../helpers/table')
 
+/**
+ * Class Interaction.
+ */
 class Interaction {
 
     get $verbosity() {
@@ -18,10 +21,20 @@ class Interaction {
         }
     }
 
+    /**
+     * hasArgument method.
+     * @param {*} $name
+     * @returns {any}
+     */
     hasArgument($name) {
         return this.input.hasArgument($name);
     }
 
+    /**
+     * argument method.
+     * @param {*} $key
+     * @returns {any}
+     */
     argument($key = null) {
         if ($key == null) {
             return this.input.getArguments();
@@ -30,14 +43,28 @@ class Interaction {
         return this.input.getArgument($key);
     }
 
+    /**
+     * arguments method.
+     * @returns {any}
+     */
     arguments() {
         return this.argument();
     }
 
+    /**
+     * hasOption method.
+     * @param {*} $name
+     * @returns {any}
+     */
     hasOption($name) {
         return this.input.hasOption($name);
     }
 
+    /**
+     * option method.
+     * @param {*} $key
+     * @returns {any}
+     */
     option($key = null) {
         if ($key == null) {
             return this.input.getOption();
@@ -45,22 +72,53 @@ class Interaction {
         return this.input.getOption($key);
     }
 
+    /**
+     * options method.
+     * @returns {any}
+     */
     options() {
         return this.option();
     }
 
+    /**
+     * confirm method.
+     * @param {*} $question
+     * @param {*} $default
+     * @returns {any}
+     */
     confirm($question, $default = false) {
         return this.output.confirm($question, $default);
     }
 
+    /**
+     * ask method.
+     * @param {*} $question
+     * @param {*} $default
+     * @returns {any}
+     */
     ask($question, $default = null) {
         return this.output.ask($question, $default);
     }
 
+    /**
+     * anticipate method.
+     * @param {*} $question
+     * @param {*} $choices
+     * @param {*} $default
+     * @returns {any}
+     */
     anticipate($question, $choices, $default = null) {
         return this.askWithCompletion($question, $choices, $default);
     }
 
+    /**
+     * table method.
+     * @param {*} $headers
+     * @param {*} $rows
+     * @param {*} $tableStyle
+     * @param {*} $columnStyles
+     * @returns {any}
+     */
     table($headers, $rows, $tableStyle = 'default', $columnStyles = []) {
         let $table = new Table(this.output);
 
@@ -78,32 +136,75 @@ class Interaction {
         $table.render();
     }
 
+    /**
+     * info method.
+     * @param {*} $string
+     * @param {*} $verbosity
+     * @returns {any}
+     */
     info($string, $verbosity = null) {
         return this.line($string, 'info', $verbosity);
     }
 
+    /**
+     * line method.
+     * @param {*} $string
+     * @param {*} $style
+     * @param {*} $verbosity
+     * @returns {any}
+     */
     line($string, $style = null, $verbosity = null) {
         let $styled = $style ? `<${$style}>${$string}</${$style}>` : $string;
 
         return this.output.writeln($styled, this.parseVerbosity($verbosity));
     }
 
+    /**
+     * comment method.
+     * @param {*} $string
+     * @param {*} $verbosity
+     * @returns {any}
+     */
     comment($string, $verbosity = null) {
         return this.line($string, 'comment', $verbosity);
     }
 
+    /**
+     * question method.
+     * @param {*} $string
+     * @param {*} $verbosity
+     * @returns {any}
+     */
     question($string, $verbosity = null) {
         return this.output.question($string, $verbosity);
     }
 
+    /**
+     * error method.
+     * @param {*} $string
+     * @param {*} $verbosity
+     * @returns {any}
+     */
     error($string, $verbosity = null) {
         return this.line($string, 'error', $verbosity);
     }
 
+    /**
+     * success method.
+     * @param {*} $string
+     * @param {*} $verbosity
+     * @returns {any}
+     */
     success($string, $verbosity = null) {
         return this.line($string, 'success', $verbosity);
     }
 
+    /**
+     * warn method.
+     * @param {*} $string
+     * @param {*} $verbosity
+     * @returns {any}
+     */
     warn($string, $verbosity = null) {
         if (!this.output.getFormatter().hasStyle('warning')) {
             $style = new OutputFormatterStyle('yellow');
@@ -114,6 +215,11 @@ class Interaction {
         return this.line($string, 'warning', $verbosity);
     }
 
+    /**
+     * alert method.
+     * @param {*} $string
+     * @returns {any}
+     */
     alert($string) {
         $length = $string + 12;
 
@@ -124,30 +230,63 @@ class Interaction {
         return this.newLine();
     }
 
+    /**
+     * newLine method.
+     * @param {*} $count
+     * @returns {any}
+     */
     newLine($count = 1) {
         return this.output.newLine($count);
     }
 
+    /**
+     * setInput method.
+     * @param {*} $input
+     * @returns {any}
+     */
     setInput($input) {
         return this.input = $input;
     }
 
+    /**
+     * setOutput method.
+     * @param {*} $output
+     * @returns {any}
+     */
     setOutput($output) {
         return this.output = $output;
     }
 
+    /**
+     * getOutput method.
+     * @returns {any}
+     */
     getOutput() {
         return this.output;
     }
 
+    /**
+     * confirmToProceed method.
+     * @returns {any}
+     */
     confirmToProceed() {
         return this.confirm('Are you sure want to process ? (y/n) : ')
     }
 
+    /**
+     * setVerbosity method.
+     * @param {*} $level
+     * @returns {any}
+     */
     setVerbosity($level) {
         return this.verbosity = this.parseVerbosity($level);
     }
 
+    /**
+     * parseVerbosity method.
+     * @param {*} $level
+     * @returns {any}
+     */
     parseVerbosity($level = null) {
         if ($level && isset(this.$verbosityMap[$level])) {
             $level = this.$verbosityMap[$level];

@@ -1,6 +1,9 @@
 const { env, unset } = require('@ostro/support/function')
 const Color = require('./color')
 
+/**
+ * Class OutputFormatterStyle.
+ */
 class OutputFormatterStyle {
 
     $color;
@@ -15,29 +18,60 @@ class OutputFormatterStyle {
     
     $handlesHrefGracefully = null;
 
+    /**
+     * Create a new instance.
+     * @param {*} $foreground
+     * @param {*} $background
+     * @param {*} $options
+     */
     constructor($foreground = null, $background = null, $options = []) {
         this.$foreground = $foreground || '';
         this.$background = $background || '';
         this.$color = new Color(this.$foreground, this.$background, this.$options = $options);
     }
 
+    /**
+     * setForeground method.
+     * @param {*} $color
+     * @returns {any}
+     */
     setForeground($color = null) {
         this.$color = new Color(this.$foreground = $color || '', this.$background, this.$options);
     }
 
+    /**
+     * setBackground method.
+     * @param {*} $color
+     * @returns {any}
+     */
     setBackground($color = null) {
         this.$color = new Color(this.$foreground, this.$background = $color || '', this.$options);
     }
 
+    /**
+     * setHref method.
+     * @param {*} $url
+     * @returns {any}
+     */
     setHref($url) {
         this.$href = $url;
     }
 
+    /**
+     * setOption method.
+     * @param {*} $option
+     * @returns {any}
+     */
     setOption($option) {
         this.$options.push($option);
         this.$color = new Color(this.$foreground, this.$background, this.$options);
     }
 
+    /**
+     * unsetOption method.
+     * @param {*} $option
+     * @returns {any}
+     */
     unsetOption($option) {
         let $pos = this.$options.indexOf($option);
         if (false !== $pos) {
@@ -47,10 +81,20 @@ class OutputFormatterStyle {
         this.$color = new Color(this.$foreground, this.$background, this.$options);
     }
 
+    /**
+     * setOptions method.
+     * @param {*} $options
+     * @returns {any}
+     */
     setOptions($options) {
         this.$color = new Color(this.$foreground, this.$background, this.$options = $options);
     }
 
+    /**
+     * apply method.
+     * @param {*} $text
+     * @returns {any}
+     */
     apply($text) {
 
         if (null === this.$handlesHrefGracefully) {

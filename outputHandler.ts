@@ -1,62 +1,127 @@
 const OutputFormatter = require('./outputFormatter')
 const OutputInterface = require('./outputInterface')
 
+/**
+ * Class OutputHandler.
+ */
 class OutputHandler {
 
     $verbosity;
 
     $formatter;
 
+    /**
+     * Create a new instance.
+     * @param {*} $verbosity
+     * @param {*} $decorated
+     * @param {*} $formatter
+     */
     constructor($verbosity = OutputInterface.VERBOSITY_NORMAL, $decorated = true, $formatter = null) {
         this.$verbosity = $verbosity || OutputInterface.VERBOSITY_NORMAL;
         this.$formatter = $formatter || new OutputFormatter();
         this.$formatter.setDecorated($decorated);
     }
 
+    /**
+     * setFormatter method.
+     * @param {*} $formatter
+     * @returns {any}
+     */
     setFormatter($formatter) {
         this.$formatter = $formatter;
     }
 
+    /**
+     * getFormatter method.
+     * @returns {any}
+     */
     getFormatter() {
         return this.$formatter;
     }
 
+    /**
+     * setDecorated method.
+     * @param {*} $decorated
+     * @returns {any}
+     */
     setDecorated($decorated) {
         this.$formatter.setDecorated($decorated);
     }
 
+    /**
+     * isDecorated method.
+     * @returns {any}
+     */
     isDecorated() {
         return this.$formatter.isDecorated();
     }
 
+    /**
+     * setVerbosity method.
+     * @param {*} $level
+     * @returns {any}
+     */
     setVerbosity($level) {
         this.$verbosity = $level;
     }
 
+    /**
+     * getVerbosity method.
+     * @returns {any}
+     */
     getVerbosity() {
         return this.$verbosity;
     }
 
+    /**
+     * isQuiet method.
+     * @returns {any}
+     */
     isQuiet() {
         return OutputInterface.VERBOSITY_QUIET === this.$verbosity;
     }
 
+    /**
+     * isVerbose method.
+     * @returns {any}
+     */
     isVerbose() {
         return OutputInterface.VERBOSITY_VERBOSE <= this.$verbosity;
     }
 
+    /**
+     * isVeryVerbose method.
+     * @returns {any}
+     */
     isVeryVerbose() {
         return OutputInterface.VERBOSITY_VERY_VERBOSE <= this.$verbosity;
     }
 
+    /**
+     * isDebug method.
+     * @returns {any}
+     */
     isDebug() {
         return OutputInterface.VERBOSITY_DEBUG <= this.$verbosity;
     }
 
+    /**
+     * writeln method.
+     * @param {*} $messages
+     * @param {*} $options
+     * @returns {any}
+     */
     writeln($messages, $options = OutputInterface.OUTPUT_NORMAL) {
         return this.write($messages, true, $options);
     }
 
+    /**
+     * write method.
+     * @param {*} $messages
+     * @param {*} $newline
+     * @param {*} $options
+     * @returns {any}
+     */
     write($messages, $newline = false, $options = OutputInterface.OUTPUT_NORMAL) {
 
         if (!Array.isArray($messages)) {
@@ -90,12 +155,23 @@ class OutputHandler {
         return this
     }
 
+    /**
+     * newLine method.
+     * @param {*} $count
+     * @returns {any}
+     */
     newLine($count = 1) {
         let $message = '\n'.repeat($count)
         process.stdout.write($message)
         return this
     }
 
+    /**
+     * confirm method.
+     * @param {*} $question
+     * @param {*} $default
+     * @returns {any}
+     */
     confirm($question, $default = false) {
         return this.question($question).then(res => {
             if (res.toLowerCase() == 'y') {
@@ -106,10 +182,21 @@ class OutputHandler {
         })
     }
 
+    /**
+     * ask method.
+     * @param {*} $question
+     * @param {*} $default
+     * @returns {any}
+     */
     ask($question, $default = null) {
         return this.output.ask($question, $default);
     }
 
+    /**
+     * question method.
+     * @param {*} $question
+     * @returns {any}
+     */
     question($question) {
         return new Promise((resolve, reject) => {
             const readline = require('readline').createInterface({
@@ -124,6 +211,12 @@ class OutputHandler {
 
     }
 
+    /**
+     * doWrite method.
+     * @param {*} $message
+     * @param {*} $newline
+     * @returns {any}
+     */
     doWrite($message, $newline) {
         process.stdout.write(Buffer.from($message))
         if ($newline)

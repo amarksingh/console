@@ -4,6 +4,9 @@ const InvalidArgumentException = require('@ostro/support/exceptions/invalidArgum
 const OutputFormatterStyle = require('./outputFormatterStyle')
 const OutputFormatterStyleStack = require('./outputFormatterStyleStack')
 
+/**
+ * Class OutputFormatter.
+ */
 class OutputFormatter {
     $decorated;
 
@@ -11,12 +14,24 @@ class OutputFormatter {
     
     $styleStack;
 
+    /**
+     * escape method.
+     * @static
+     * @param {*} $text
+     * @returns {any}
+     */
     static escape($text) {
         $text = $text.replace('/([^\\\\]?)</', '$1\\<');
 
         return this.escapeTrailingBackslash($text);
     }
 
+    /**
+     * escapeTrailingBackslash method.
+     * @static
+     * @param {*} $text
+     * @returns {any}
+     */
     static escapeTrailingBackslash($text) {
         if ($text.endsWith('\\')) {
             let $len = strlen($text);
@@ -28,6 +43,11 @@ class OutputFormatter {
         return $text;
     }
 
+    /**
+     * Create a new instance.
+     * @param {*} $decorated
+     * @param {*} $styles
+     */
     constructor($decorated = false, $styles = []) {
         this.$decorated = $decorated;
 
@@ -45,22 +65,47 @@ class OutputFormatter {
         this.$styleStack = new OutputFormatterStyleStack();
     }
 
+    /**
+     * setDecorated method.
+     * @param {*} $decorated
+     * @returns {any}
+     */
     setDecorated($decorated) {
         this.$decorated = $decorated;
     }
 
+    /**
+     * isDecorated method.
+     * @returns {any}
+     */
     isDecorated() {
         return this.$decorated;
     }
 
+    /**
+     * setStyle method.
+     * @param {*} $name
+     * @param {*} $style
+     * @returns {any}
+     */
     setStyle($name, $style) {
         this.$styles[lower($name)] = $style;
     }
 
+    /**
+     * hasStyle method.
+     * @param {*} $name
+     * @returns {any}
+     */
     hasStyle($name) {
         return isset(this.$styles[lower($name)]);
     }
 
+    /**
+     * getStyle method.
+     * @param {*} $name
+     * @returns {any}
+     */
     getStyle($name) {
         if (!this.hasStyle($name)) {
             throw new InvalidArgumentException('Undefined style: ' + $name);
@@ -69,10 +114,21 @@ class OutputFormatter {
         return this.$styles[lower($name)];
     }
 
+    /**
+     * format method.
+     * @param {*} $message
+     * @returns {any}
+     */
     format($message) {
         return this.formatAndWrap($message, 0);
     }
 
+    /**
+     * formatAndWrap method.
+     * @param {*} $message
+     * @param {*} $width
+     * @returns {any}
+     */
     formatAndWrap($message, $width) {
         let $offset = 0;
         let $output = '';
@@ -123,10 +179,19 @@ class OutputFormatter {
         return $output.replace('\\<', '<');
     }
 
+    /**
+     * getStyleStack method.
+     * @returns {any}
+     */
     getStyleStack() {
         return this.$styleStack;
     }
 
+    /**
+     * createStyleFromString method.
+     * @param {*} $string
+     * @returns {any}
+     */
     createStyleFromString($string) {
         if (isset(this.$styles[$string])) {
             return this.$styles[$string];
@@ -159,6 +224,14 @@ class OutputFormatter {
         return $style;
     }
 
+    /**
+     * applyCurrentStyle method.
+     * @param {*} $text
+     * @param {*} $current
+     * @param {*} $width
+     * @param {*} $currentLineLength
+     * @returns {any}
+     */
     applyCurrentStyle($text, $current, $width, $currentLineLength) {
         if ('' === $text) {
             return '';

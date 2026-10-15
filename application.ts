@@ -6,11 +6,18 @@ const Command = require('./command')
 const CommandNotFoundException = require('./exceptions/commandNotFoundException')
 const lodash = require("lodash")
 
+/**
+ * Class Application.
+ */
 class Application {
 
     static $bootstrappers = [];
     $commands = [];
 
+    /**
+     * Create a new instance.
+     * @param {*} $app
+     */
     constructor($app) {
         this.$app = $app;
         this.setAutoExit(0);
@@ -20,14 +27,28 @@ class Application {
         this.bootstrap();
     }
 
+    /**
+     * setAutoExit method.
+     * @param {*} status
+     * @returns {any}
+     */
     setAutoExit(status) {
         process.exitCode = status
     }
 
+    /**
+     * getAutoExit method.
+     * @returns {any}
+     */
     getAutoExit() {
         return process.exitCode
     }
 
+    /**
+     * run method.
+     * @param {*} $input
+     * @returns {any}
+     */
     run($input = []) {
         return commander.parseAsync($input, {
             from: 'user'
@@ -35,6 +56,12 @@ class Application {
 
     }
 
+    /**
+     * call method.
+     * @param {*} $command
+     * @param {*} $arguments
+     * @returns {any}
+     */
     call($command, $arguments = []) {
         $command = this.parseCommand($command);
         $command = $command.slice(0, 1);
@@ -50,6 +77,11 @@ class Application {
         );
 
     }
+    /**
+     * createInputFromArguments method.
+     * @param {*} $arguments
+     * @returns {any}
+     */
     createInputFromArguments($arguments) {
         if (Array.isArray($arguments)) {
             return $arguments.map(arg => this.createInputFromArguments(arg))
@@ -72,33 +104,66 @@ class Application {
         return $arguments
     }
 
+    /**
+     * callCommand method.
+     * @returns {any}
+     */
     callCommand() {
         return this.call(...arguments)
     }
 
+    /**
+     * has method.
+     * @param {*} $command
+     * @returns {any}
+     */
     has($command) {
         return this.$commands.includes($command[0])
     }
 
+    /**
+     * getCommandName method.
+     * @param {*} $input
+     * @returns {any}
+     */
     getCommandName($input) {
         let $command = this.getCommand($input)._
         return $command.length ? $command[0] : ''
     }
 
+    /**
+     * bootstrap method.
+     * @returns {any}
+     */
     bootstrap() {
         for (let $bootstrapper of Application.$bootstrappers) {
             $bootstrapper(this);
         }
     }
 
+    /**
+     * parseCommand method.
+     * @param {*} $command
+     * @returns {any}
+     */
     parseCommand($command) {
         return parseArgsStringToArgv($command)
     }
 
+    /**
+     * resolve method.
+     * @param {*} $command
+     * @returns {any}
+     */
     resolve($command) {
         return this.add(this.$app.make($command));
     }
 
+    /**
+     * resolveCommands method.
+     * @param {*} $commands
+     * @returns {any}
+     */
     resolveCommands($commands) {
 
         if (Array.isArray($commands)) {
@@ -116,14 +181,29 @@ class Application {
         return this;
     }
 
+    /**
+     * addBootstraper method.
+     * @static
+     * @param {*} callback
+     * @returns {any}
+     */
     static addBootstraper(callback) {
         this.$bootstrappers.push(callback)
     }
 
+    /**
+     * getApp method.
+     * @returns {any}
+     */
     getApp() {
         return this.$app;
     }
 
+    /**
+     * parseArgument method.
+     * @param {*} arg
+     * @returns {any}
+     */
     parseArgument(arg) {
         if (Array.isArray(arg)) {
             const [key, value] = arg;
@@ -139,6 +219,11 @@ class Application {
         }
     }
 
+    /**
+     * add method.
+     * @param {*} command
+     * @returns {any}
+     */
     add(command) {
         if (command instanceof Command != true) {
             throw new Error(`Instance of [@ostro/console/command] was not available on [${command.constructor.name}]`)

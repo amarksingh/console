@@ -2,21 +2,42 @@ const { empty } = require('@ostro/support/function')
 const InvalidArgumentException = require('@ostro/support/exceptions/invalidArgumentException')
 const OutputFormatterStyle = require('./outputFormatterStyle')
 
+/**
+ * Class OutputFormatterStyleStack.
+ */
 class OutputFormatterStyleStack {
 
+    /**
+     * Create a new instance.
+     * @param {*} $emptyStyle
+     */
     constructor($emptyStyle = null) {
         this.$emptyStyle = $emptyStyle || new OutputFormatterStyle();
         this.$styles = [];
     }
 
+    /**
+     * reset method.
+     * @returns {any}
+     */
     reset() {
         this.$styles = [];
     }
 
+    /**
+     * push method.
+     * @param {*} $style
+     * @returns {any}
+     */
     push($style) {
         this.$styles.push($style);
     }
 
+    /**
+     * pop method.
+     * @param {*} $style
+     * @returns {any}
+     */
     pop($style = null) {
         if (empty(this.$styles)) {
             return this.$emptyStyle;
@@ -39,6 +60,10 @@ class OutputFormatterStyleStack {
         throw new InvalidArgumentException('Incorrectly nested style tag found.');
     }
 
+    /**
+     * getCurrent method.
+     * @returns {any}
+     */
     getCurrent() {
         if (empty(this.$styles)) {
             return this.$emptyStyle;
@@ -47,12 +72,21 @@ class OutputFormatterStyleStack {
         return this.$styles[this.$styles.length - 1];
     }
 
+    /**
+     * setEmptyStyle method.
+     * @param {*} $emptyStyle
+     * @returns {any}
+     */
     setEmptyStyle($emptyStyle) {
         this.$emptyStyle = $emptyStyle;
 
         return this;
     }
 
+    /**
+     * getEmptyStyle method.
+     * @returns {any}
+     */
     getEmptyStyle() {
         return this.$emptyStyle;
     }
