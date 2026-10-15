@@ -2,7 +2,7 @@
   "name": "@ostro/console",
   "version": "1.0.7",
   "description": "Command module for OstroJS",
-  "main": "application.js",
+  "main": "application.ts",
   "scripts": {
     "test": "npx c8 npx jest"
   },
