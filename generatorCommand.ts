@@ -1,6 +1,6 @@
 import Command from './command';
 import { rtrim, trim, ltrim } from '@ostro/support/function';
-import StringHelper from '@ostro/support/string';
+import * as StringHelper from '@ostro/support/string';
 import path, { dirname } from 'path';
 
 declare const isDirectory: any;
