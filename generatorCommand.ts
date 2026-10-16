@@ -16,7 +16,9 @@ class GeneratorCommand extends Command {
 
     $type: any;
 
-    $dirname = __dirname;
+    get $dirname(): string {
+        return __dirname;
+    }
 
     getStub(): any {}
     argument: any;
