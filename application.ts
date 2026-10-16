@@ -227,8 +227,8 @@ class Application {
      * @returns {any}
      */
     add(command: any) {
-        if (command instanceof Command != true) {
-            throw new Error(`Instance of [@ostro/console/command] was not available on [${command.constructor.name}]`)
+        if (!command || (command instanceof Command != true && typeof command.$signature !== 'string' && typeof command.$signature !== 'function')) {
+            throw new Error(`Instance of [@ostro/console/command] was not available on [${command?.constructor?.name}]`)
         }
         const self = this;
         this.$commands.push(command.$signature);
