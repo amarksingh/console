@@ -1,80 +1,85 @@
-const kHeaders = Symbol('headers')
-const kRows = Symbol('row')
-const kStyle = Symbol('style')
-const kColumStyle = Symbol('columnStyle')
+const kHeaders: unique symbol = Symbol('headers');
+const kRows: unique symbol = Symbol('row');
+const kStyle: unique symbol = Symbol('style');
+const kColumStyle: unique symbol = Symbol('columnStyle');
 
 /**
  * Class Table.
  */
 class Table {
+    public output: unknown;
+    public [kHeaders]: any[] = [];
+    public [kRows]: any[][] = [];
+    public [kStyle]: unknown;
+    public [kColumStyle]: unknown;
 
     /**
      * Create a new instance.
-     * @param {*} output
+     * @param output - The output handler.
      */
-    constructor(output: any) {
-        this.output = output
+    constructor(output: unknown) {
+        this.output = output;
     }
 
     /**
-     * setHeaders method.
-     * @param {*} headers
-     * @returns {any}
+     * Set table headers.
+     * @param headers - Array or record of header names.
+     * @returns The table instance.
      */
-    setHeaders(headers: Record<string, any>) {
-    	this[kHeaders] = headers
-        return this
+    public setHeaders(headers: any): this {
+        this[kHeaders] = headers;
+        return this;
     }
 
     /**
-     * setRows method.
-     * @param {*} rows
-     * @returns {any}
+     * Set table rows.
+     * @param rows - Table rows data.
+     * @returns The table instance.
      */
-    setRows(rows: any) {
-    	this[kRows] = rows
-        return this
+    public setRows(rows: any[][]): this {
+        this[kRows] = rows;
+        return this;
     }
 
     /**
-     * setStyle method.
-     * @param {*} style
-     * @returns {any}
+     * Set table style.
+     * @param style - The table style.
+     * @returns The table instance.
      */
-    setStyle(style: any) {
-    	this[kStyle] = style
-        return this
+    public setStyle(style: unknown): this {
+        this[kStyle] = style;
+        return this;
     }
 
     /**
-     * setColumnStyle method.
-     * @param {*} style
-     * @returns {any}
+     * Set column style.
+     * @param columnIndex - Column index or style.
+     * @param style - The column style.
+     * @returns The table instance.
      */
-    setColumnStyle(style: any) {
-    	this[kColumStyle] = style
+    public setColumnStyle(columnIndex: unknown, style?: unknown): this {
+        this[kColumStyle] = style !== undefined ? { [columnIndex as string]: style } : columnIndex;
+        return this;
     }
 
     /**
-     * render method.
-     * @returns {any}
+     * Render the table.
      */
-    render() {
-    	let datas = []
-    	for(let row of this[kRows]){
-    		let data = {}
-    		this[kHeaders].forEach((header,i)=>{
-    			let message = row[i]
-    			if(typeof message == 'string'){
-    				message = message.replace(/<.*>(.*)<\/.*>/g,'$1')
-    			}
-    			data[header] = message
-    		})
-    		datas.push(data)
-    	}
-    	console.table(datas)
+    public render(): void {
+        const datas: Record<string, unknown>[] = [];
+        for (const row of this[kRows]) {
+            const data: Record<string, unknown> = {};
+            this[kHeaders].forEach((header: string, i: number) => {
+                let message: unknown = row[i];
+                if (typeof message === 'string') {
+                    message = message.replace(/<.*>(.*)<\/.*>/g, '$1');
+                }
+                data[header] = message;
+            });
+            datas.push(data);
+        }
+        console.table(datas);
     }
-
 }
 
-module.exports = Table
+export = Table;

@@ -1,105 +1,95 @@
-const { env, unset } = require('@ostro/support/function')
-const Color = require('./color')
+import { env, unset } from '@ostro/support/function';
+import Color from './color';
 
 /**
  * Class OutputFormatterStyle.
  */
 class OutputFormatterStyle {
 
-    $color;
-
-    $foreground;
-
-    $background;
-
-    $options;
-
-    $href = null;
-    
-    $handlesHrefGracefully = null;
+    public $color: Color;
+    public $foreground: string;
+    public $background: string;
+    public $options: string[];
+    public $href: string | null = null;
+    public $handlesHrefGracefully: boolean | null = null;
 
     /**
      * Create a new instance.
-     * @param {*} $foreground
-     * @param {*} $background
-     * @param {*} $options
+     * @param $foreground - Foreground color.
+     * @param $background - Background color.
+     * @param $options - Style options.
      */
-    constructor($foreground: any = null, $background: any = null, $options: any[] = []) {
+    constructor($foreground: string | null = null, $background: string | null = null, $options: string[] = []) {
         this.$foreground = $foreground || '';
         this.$background = $background || '';
-        this.$color = new Color(this.$foreground, this.$background, this.$options = $options);
+        this.$options = $options;
+        this.$color = new Color(this.$foreground, this.$background, this.$options);
     }
 
     /**
-     * setForeground method.
-     * @param {*} $color
-     * @returns {any}
+     * Set foreground color.
+     * @param $color - Color name or hex.
      */
-    setForeground($color: any = null) {
+    public setForeground($color: string | null = null): void {
         this.$color = new Color(this.$foreground = $color || '', this.$background, this.$options);
     }
 
     /**
-     * setBackground method.
-     * @param {*} $color
-     * @returns {any}
+     * Set background color.
+     * @param $color - Color name or hex.
      */
-    setBackground($color: any = null) {
+    public setBackground($color: string | null = null): void {
         this.$color = new Color(this.$foreground, this.$background = $color || '', this.$options);
     }
 
     /**
-     * setHref method.
-     * @param {*} $url
-     * @returns {any}
+     * Set hyperlink URL.
+     * @param $url - URL for hyperlink.
      */
-    setHref($url: string) {
+    public setHref($url: string): void {
         this.$href = $url;
     }
 
     /**
-     * setOption method.
-     * @param {*} $option
-     * @returns {any}
+     * Set a style option.
+     * @param $option - Option name (e.g. 'bold').
      */
-    setOption($option: any) {
+    public setOption($option: string): void {
         this.$options.push($option);
         this.$color = new Color(this.$foreground, this.$background, this.$options);
     }
 
     /**
-     * unsetOption method.
-     * @param {*} $option
-     * @returns {any}
+     * Unset a style option.
+     * @param $option - Option name.
      */
-    unsetOption($option: any) {
-        let $pos = this.$options.indexOf($option);
-        if (false !== $pos) {
-            unset(this.$options[$pos]);
+    public unsetOption($option: string): void {
+        const $pos = this.$options.indexOf($option);
+        if (-1 !== $pos) {
+            unset(this.$options, $pos);
+            this.$options.splice($pos, 1);
         }
 
         this.$color = new Color(this.$foreground, this.$background, this.$options);
     }
 
     /**
-     * setOptions method.
-     * @param {*} $options
-     * @returns {any}
+     * Set all style options.
+     * @param $options - Array of option names.
      */
-    setOptions($options: Record<string, any>) {
+    public setOptions($options: string[]): void {
         this.$color = new Color(this.$foreground, this.$background, this.$options = $options);
     }
 
     /**
-     * apply method.
-     * @param {*} $text
-     * @returns {any}
+     * Apply style to text.
+     * @param $text - Text to format.
+     * @returns Formatted text.
      */
-    apply($text: any) {
-
+    public apply($text: string): string {
         if (null === this.$handlesHrefGracefully) {
             this.$handlesHrefGracefully = 'JetBrains-JediTerm' !== env('TERMINAL_EMULATOR') &&
-                (!env('KONSOLE_VERSION') || env('KONSOLE_VERSION') > 201100);
+                (!env('KONSOLE_VERSION') || Number(env('KONSOLE_VERSION')) > 201100);
         }
 
         if (null !== this.$href && this.$handlesHrefGracefully) {
@@ -109,4 +99,4 @@ class OutputFormatterStyle {
     }
 }
 
-module.exports = OutputFormatterStyle
+export = OutputFormatterStyle;

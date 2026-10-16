@@ -1,12 +1,12 @@
-const { isset, sprintf, count, env } = require('@ostro/support/function')
-const InvalidArgumentException = require('@ostro/support/exceptions/invalidArgumentException')
+import { isset, sprintf, count, env } from '@ostro/support/function';
+import InvalidArgumentException from '@ostro/support/exceptions/invalidArgumentException';
 
 /**
  * Class Color.
  */
 class Color {
 
-    static COLORS = {
+    public static COLORS: Record<string, number> = {
         'black': 0,
         'red': 1,
         'green': 2,
@@ -18,7 +18,7 @@ class Color {
         'default': 9,
     };
 
-    static BRIGHT_COLORS = {
+    public static BRIGHT_COLORS: Record<string, number> = {
         'gray': 0,
         'bright-red': 1,
         'bright-green': 2,
@@ -29,7 +29,7 @@ class Color {
         'bright-white': 7,
     };
 
-    static AVAILABLE_OPTIONS = {
+    public static AVAILABLE_OPTIONS: Record<string, { set: number; unset: number }> = {
         'bold': { 'set': 1, 'unset': 22 },
         'underscore': { 'set': 4, 'unset': 24 },
         'blink': { 'set': 5, 'unset': 25 },
@@ -37,50 +37,52 @@ class Color {
         'conceal': { 'set': 8, 'unset': 28 },
     };
 
-    $options =  {};
+    public $options: Record<string, { set: number; unset: number }> = {};
+    public $foreground: string | number = '';
+    public $background: string | number = '';
 
     /**
      * Create a new instance.
-     * @param {*} $foreground
-     * @param {*} $background
-     * @param {*} $options
+     * @param $foreground - Foreground color name or hex.
+     * @param $background - Background color name or hex.
+     * @param $options - Array of style options.
      */
-    constructor($foreground: string = '', $background: string = '', $options: any[] = []) {
+    constructor($foreground: string = '', $background: string = '', $options: string[] = []) {
         this.$foreground = this.parseColor($foreground);
         this.$background = this.parseColor($background, true);
 
-        for (let $option of $options) {
-            if (!isset(this.constructor.AVAILABLE_OPTIONS[$option])) {
-                throw new InvalidArgumentException(sprintf('Invalid option specified: "%s". Expected one of (%s).', $option, Object.keys(this.constructor.AVAILABLE_OPTIONS).join(', ')));
+        for (const $option of $options) {
+            if (!isset((this.constructor as typeof Color).AVAILABLE_OPTIONS[$option])) {
+                throw new InvalidArgumentException(sprintf('Invalid option specified: "%s". Expected one of (%s).', $option, Object.keys((this.constructor as typeof Color).AVAILABLE_OPTIONS).join(', ')));
             }
 
-            this.$options[$option] = this.constructor.AVAILABLE_OPTIONS[$option];
+            this.$options[$option] = (this.constructor as typeof Color).AVAILABLE_OPTIONS[$option];
         }
     }
 
     /**
-     * apply method.
-     * @param {*} $text
-     * @returns {any}
+     * Apply color to text.
+     * @param $text - Text to color.
+     * @returns Formatted colored text.
      */
-    apply($text: any) {
+    public apply($text: string): string {
         return this.set() + $text + this.unset();
     }
 
     /**
-     * set method.
-     * @returns {any}
+     * Get ANSI set code sequence.
+     * @returns ANSI set escape code.
      */
-    set() {
-        let $setCodes = [];
+    public set(): string {
+        const $setCodes: (string | number)[] = [];
         if ('' !== this.$foreground) {
             $setCodes.push(this.$foreground);
         }
         if ('' !== this.$background) {
             $setCodes.push(this.$background);
         }
-        for (let $option in this.$options) {
-            $setCodes.push($option['set']);
+        for (const $option in this.$options) {
+            $setCodes.push(this.$options[$option]['set']);
         }
 
         if (0 === count($setCodes)) {
@@ -91,19 +93,19 @@ class Color {
     }
 
     /**
-     * unset method.
-     * @returns {any}
+     * Get ANSI unset code sequence.
+     * @returns ANSI unset escape code.
      */
-    unset() {
-        let $unsetCodes = [];
+    public unset(): string {
+        const $unsetCodes: (string | number)[] = [];
         if ('' !== this.$foreground) {
             $unsetCodes.push(39);
         }
         if ('' !== this.$background) {
             $unsetCodes.push(49);
         }
-        for (let $option in this.$options) {
-            $unsetCodes.push($option['unset']);
+        for (const $option in this.$options) {
+            $unsetCodes.push(this.$options[$option]['unset']);
         }
         if (0 === count($unsetCodes)) {
             return '';
@@ -113,12 +115,12 @@ class Color {
     }
 
     /**
-     * parseColor method.
-     * @param {*} $color
-     * @param {*} $background
-     * @returns {any}
+     * Parse color string to ANSI code.
+     * @param $color - Color string.
+     * @param $background - Whether this is background color.
+     * @returns ANSI color code string.
      */
-    parseColor($color: any, $background: boolean = false) {
+    public parseColor($color: string, $background: boolean = false): string {
         if ('' === $color) {
             return '';
         }
@@ -137,42 +139,42 @@ class Color {
             return ($background ? '4' : '3') + this.convertHexColorToAnsi(parseInt($color, 16));
         }
 
-        if (isset(this.constructor.COLORS[$color])) {
-            return ($background ? '4' : '3') + this.constructor.COLORS[$color];
+        if (isset((this.constructor as typeof Color).COLORS[$color])) {
+            return ($background ? '4' : '3') + (this.constructor as typeof Color).COLORS[$color];
         }
 
-        if (isset(this.constructor.BRIGHT_COLORS[$color])) {
-            return ($background ? '10' : '9') + this.constructor.BRIGHT_COLORS[$color];
+        if (isset((this.constructor as typeof Color).BRIGHT_COLORS[$color])) {
+            return ($background ? '10' : '9') + (this.constructor as typeof Color).BRIGHT_COLORS[$color];
         }
 
-        throw new InvalidArgumentException(sprintf('Invalid "%s" color; expected one of (%s).', $color, Object.keys(this.constructor.COLORS).concat(Object.keys(this.constructor.BRIGHT_COLORS)).join(',')));
+        throw new InvalidArgumentException(sprintf('Invalid "%s" color; expected one of (%s).', $color, Object.keys((this.constructor as typeof Color).COLORS).concat(Object.keys((this.constructor as typeof Color).BRIGHT_COLORS)).join(',')));
     }
 
     /**
-     * convertHexColorToAnsi method.
-     * @param {*} $color
-     * @returns {any}
+     * Convert hex color to ANSI sequence.
+     * @param $color - Numeric color value.
+     * @returns ANSI color code string.
      */
-    convertHexColorToAnsi($color: any) {
-        let $r = ($color >> 16) & 255;
-        let $g = ($color >> 8) & 255;
-        let $b = $color & 255;
+    public convertHexColorToAnsi($color: number): string {
+        const $r = ($color >> 16) & 255;
+        const $g = ($color >> 8) & 255;
+        const $b = $color & 255;
 
         if ('truecolor' !== env('COLORTERM')) {
-            return this.degradeHexColorToAnsi($r, $g, $b);
+            return String(this.degradeHexColorToAnsi($r, $g, $b));
         }
 
         return sprintf('8;2;%d;%d;%d', $r, $g, $b);
     }
 
     /**
-     * degradeHexColorToAnsi method.
-     * @param {*} $r
-     * @param {*} $g
-     * @param {*} $b
-     * @returns {any}
+     * Degrade hex color to ANSI.
+     * @param $r - Red channel.
+     * @param $g - Green channel.
+     * @param $b - Blue channel.
+     * @returns Degraded ANSI code.
      */
-    degradeHexColorToAnsi($r: any, $g: any, $b: any) {
+    public degradeHexColorToAnsi($r: number, $g: number, $b: number): number {
         if (0 === Math.round(this.getSaturation($r, $g, $b) / 50)) {
             return 0;
         }
@@ -181,18 +183,18 @@ class Color {
     }
 
     /**
-     * getSaturation method.
-     * @param {*} $r
-     * @param {*} $g
-     * @param {*} $b
-     * @returns {any}
+     * Calculate color saturation.
+     * @param $r - Red channel.
+     * @param $g - Green channel.
+     * @param $b - Blue channel.
+     * @returns Saturation percentage.
      */
-    getSaturation($r: any, $g: any, $b: any) {
+    public getSaturation($r: number, $g: number, $b: number): number {
         $r = $r / 255;
         $g = $g / 255;
         $b = $b / 255;
-        $v = Math.max($r, $g, $b);
-        let $diff = $v - Math.min($r, $g, $b)
+        const $v = Math.max($r, $g, $b);
+        const $diff = $v - Math.min($r, $g, $b);
         if (0 === $diff) {
             return 0;
         }
@@ -201,4 +203,4 @@ class Color {
     }
 }
 
-module.exports = Color
+export = Color;

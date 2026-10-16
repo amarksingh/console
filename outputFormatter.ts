@@ -1,40 +1,35 @@
-const { isset, strlen, rtrim, str_replace } = require('@ostro/support/function')
-const { lower } = require('@ostro/support/string')
-const InvalidArgumentException = require('@ostro/support/exceptions/invalidArgumentException')
-const OutputFormatterStyle = require('./outputFormatterStyle')
-const OutputFormatterStyleStack = require('./outputFormatterStyleStack')
+import { isset, strlen, rtrim, str_replace, ltrim } from '@ostro/support/function';
+import { lower } from '@ostro/support/string';
+import InvalidArgumentException from '@ostro/support/exceptions/invalidArgumentException';
+import OutputFormatterStyle from './outputFormatterStyle';
+import OutputFormatterStyleStack from './outputFormatterStyleStack';
 
 /**
  * Class OutputFormatter.
  */
 class OutputFormatter {
-    $decorated;
-
-    $styles = {};
-    
-    $styleStack;
+    public $decorated: boolean;
+    public $styles: Record<string, OutputFormatterStyle> = {};
+    public $styleStack: OutputFormatterStyleStack;
 
     /**
-     * escape method.
-     * @static
-     * @param {*} $text
-     * @returns {any}
+     * Escape special characters in text.
+     * @param $text - Text to escape.
+     * @returns Escaped text.
      */
-    static escape($text: any) {
-        $text = $text.replace('/([^\\\\]?)</', '$1\\<');
-
+    public static escape($text: string): string {
+        $text = $text.replace(/([^\\\\]?)</g, '$1\\<');
         return this.escapeTrailingBackslash($text);
     }
 
     /**
-     * escapeTrailingBackslash method.
-     * @static
-     * @param {*} $text
-     * @returns {any}
+     * Escape trailing backslashes.
+     * @param $text - Text with possible trailing backslash.
+     * @returns Processed text.
      */
-    static escapeTrailingBackslash($text: any) {
+    public static escapeTrailingBackslash($text: string): string {
         if ($text.endsWith('\\')) {
-            let $len = strlen($text);
+            const $len = strlen($text);
             $text = rtrim($text, '\\');
             $text = str_replace("\x1b", '', $text);
             $text += "\x1b".repeat($len - strlen($text));
@@ -45,10 +40,10 @@ class OutputFormatter {
 
     /**
      * Create a new instance.
-     * @param {*} $decorated
-     * @param {*} $styles
+     * @param $decorated - Whether decorated output is enabled.
+     * @param $styles - Initial styles map.
      */
-    constructor($decorated: boolean = false, $styles: any[] = []) {
+    constructor($decorated: boolean = false, $styles: Record<string, OutputFormatterStyle> = {}) {
         this.$decorated = $decorated;
 
         this.setStyle('error', new OutputFormatterStyle('white', 'red'));
@@ -58,7 +53,7 @@ class OutputFormatter {
         this.setStyle('comment', new OutputFormatterStyle('yellow'));
         this.setStyle('question', new OutputFormatterStyle('black', 'cyan'));
 
-        for (let $name in $styles) {
+        for (const $name in $styles) {
             this.setStyle($name, $styles[$name]);
         }
 
@@ -66,47 +61,45 @@ class OutputFormatter {
     }
 
     /**
-     * setDecorated method.
-     * @param {*} $decorated
-     * @returns {any}
+     * Set decorated mode.
+     * @param $decorated - Decorated flag.
      */
-    setDecorated($decorated: any) {
+    public setDecorated($decorated: boolean): void {
         this.$decorated = $decorated;
     }
 
     /**
-     * isDecorated method.
-     * @returns {any}
+     * Check if output is decorated.
+     * @returns True if decorated.
      */
-    isDecorated() {
+    public isDecorated(): boolean {
         return this.$decorated;
     }
 
     /**
-     * setStyle method.
-     * @param {*} $name
-     * @param {*} $style
-     * @returns {any}
+     * Register a style.
+     * @param $name - Style name.
+     * @param $style - Style instance.
      */
-    setStyle($name: string, $style: any) {
+    public setStyle($name: string, $style: OutputFormatterStyle): void {
         this.$styles[lower($name)] = $style;
     }
 
     /**
-     * hasStyle method.
-     * @param {*} $name
-     * @returns {any}
+     * Check if a style is registered.
+     * @param $name - Style name.
+     * @returns True if style exists.
      */
-    hasStyle($name: string) {
+    public hasStyle($name: string): boolean {
         return isset(this.$styles[lower($name)]);
     }
 
     /**
-     * getStyle method.
-     * @param {*} $name
-     * @returns {any}
+     * Get a registered style.
+     * @param $name - Style name.
+     * @returns Style instance.
      */
-    getStyle($name: string) {
+    public getStyle($name: string): OutputFormatterStyle {
         if (!this.hasStyle($name)) {
             throw new InvalidArgumentException('Undefined style: ' + $name);
         }
@@ -115,40 +108,39 @@ class OutputFormatter {
     }
 
     /**
-     * format method.
-     * @param {*} $message
-     * @returns {any}
+     * Format a message.
+     * @param $message - Message with style tags.
+     * @returns Formatted message.
      */
-    format($message: string) {
+    public format($message: string): string {
         return this.formatAndWrap($message, 0);
     }
 
     /**
-     * formatAndWrap method.
-     * @param {*} $message
-     * @param {*} $width
-     * @returns {any}
+     * Format and wrap a message to width.
+     * @param $message - Message string.
+     * @param $width - Maximum width.
+     * @returns Formatted wrapped string.
      */
-    formatAndWrap($message: string, $width: any) {
+    public formatAndWrap($message: string, $width: number = 0): string {
         let $offset = 0;
         let $output = '';
-        let $tagRegex = '[a-z][^<>]*';
         let $currentLineLength = 0;
-        let regx = new RegExp(`<(([a-z][^<>]*)|\/([a-z][^<>]*)?)>`, 'g')
-        let $matches = [...$message.matchAll(regx)]
-        let $i = 0
-        let $match
-        while ($match = regx.exec($message)) {
-            let $pos = $match.index;
-            let $text = $match[0];
-            let $tag
-            if (0 != $pos && '\\' == $message[$pos - 1]) {
-                continue;
+        const regx = new RegExp('<(([a-z][^<>]*)|\/([a-z][^<>]*)?)>', 'g');
+        let $match: RegExpExecArray | null;
 
+        while (($match = regx.exec($message)) !== null) {
+            const $pos = $match.index;
+            const $text = $match[0];
+            let $tag: string;
+
+            if (0 !== $pos && '\\' === $message[$pos - 1]) {
+                continue;
             }
-            $output += this.applyCurrentStyle($message.substr($offset, $pos - $offset), $output, $width, $currentLineLength);
+
+            $output += this.applyCurrentStyle($message.slice($offset, $pos), $output, $width, $currentLineLength);
             $offset = $pos + $text.length;
-            let $open = '/' != $text[1]
+            const $open = '/' !== $text[1];
             if ($open) {
                 $tag = $match[2];
             } else {
@@ -156,10 +148,9 @@ class OutputFormatter {
             }
 
             if (!$open && !$tag) {
-
                 this.$styleStack.pop();
             } else {
-                let $style = this.createStyleFromString($tag)
+                const $style = this.createStyleFromString($tag);
 
                 if (null === $style) {
                     $output += this.applyCurrentStyle($text, $output, $width, $currentLineLength);
@@ -171,51 +162,47 @@ class OutputFormatter {
             }
         }
 
-        $output += this.applyCurrentStyle($message.substr($offset), $output, $width, $currentLineLength);
+        $output += this.applyCurrentStyle($message.slice($offset), $output, $width, $currentLineLength);
 
-        if ($output.includes("\x1b")) {
-            return $output.replace('\\<', '<');
-        }
         return $output.replace('\\<', '<');
     }
 
     /**
-     * getStyleStack method.
-     * @returns {any}
+     * Get the style stack.
+     * @returns Style stack instance.
      */
-    getStyleStack() {
+    public getStyleStack(): OutputFormatterStyleStack {
         return this.$styleStack;
     }
 
     /**
-     * createStyleFromString method.
-     * @param {*} $string
-     * @returns {any}
+     * Create style from string specification.
+     * @param $string - Style specification string.
+     * @returns Style instance or null.
      */
-    createStyleFromString($string: any) {
+    public createStyleFromString($string: string): OutputFormatterStyle | null {
         if (isset(this.$styles[$string])) {
             return this.$styles[$string];
         }
-        let $matches = [...$string.matchAll(/([^=]+)=([^;]+)(;|$)/g)]
-        if (!$matches) {
+        const $matches = [...$string.matchAll(/([^=]+)=([^;]+)(;|$)/g)];
+        if (!$matches || $matches.length === 0) {
             return null;
         }
 
-        let $style = new OutputFormatterStyle();
-        for (let $match of $matches) {
-            $match.shift();
-            $match[0] = $match[0].toLowerCase();
-            if ('fg' == $match[0]) {
-                $style.setForeground($match[1].toLowerCase());
-            } else if ('bg' == $match[0]) {
-                $style.setBackground($match[1].toLowerCase());
-            } else if ('href' === $match[0]) {
-                $style.setHref($match[1]);
-            } else if ('options' === $match[0]) {
-                let $options = $match[1].matchAll(/([^,;]+)/g);
-                $options = [...$options].shift();
-                for (let $option of $options) {
-                    $style.setOption($option);
+        const $style = new OutputFormatterStyle();
+        for (const $match of $matches) {
+            const key = $match[1].toLowerCase();
+            const val = $match[2];
+            if ('fg' === key) {
+                $style.setForeground(val.toLowerCase());
+            } else if ('bg' === key) {
+                $style.setBackground(val.toLowerCase());
+            } else if ('href' === key) {
+                $style.setHref(val);
+            } else if ('options' === key) {
+                const $optionsMatches = [...val.matchAll(/([^,;]+)/g)];
+                for (const $opt of $optionsMatches) {
+                    $style.setOption($opt[1]);
                 }
             } else {
                 return null;
@@ -225,14 +212,14 @@ class OutputFormatter {
     }
 
     /**
-     * applyCurrentStyle method.
-     * @param {*} $text
-     * @param {*} $current
-     * @param {*} $width
-     * @param {*} $currentLineLength
-     * @returns {any}
+     * Apply current stack style to text chunk.
+     * @param $text - Text chunk.
+     * @param $current - Current formatted output.
+     * @param $width - Line wrap width.
+     * @param $currentLineLength - Current line length tracker.
+     * @returns Styled chunk.
      */
-    applyCurrentStyle($text: any, $current: any, $width: any, $currentLineLength: any) {
+    public applyCurrentStyle($text: string, $current: string, $width: number, $currentLineLength: number): string {
         if ('' === $text) {
             return '';
         }
@@ -245,23 +232,24 @@ class OutputFormatter {
             $text = ltrim($text);
         }
 
+        let $prefix = '';
         if ($currentLineLength) {
-            $prefix = $text.substr(0, $i = $width - $currentLineLength) + "\n";
-            $text = $text.substr($i);
-        } else {
-            $prefix = '';
+            const $i = $width - $currentLineLength;
+            $prefix = $text.slice(0, $i) + "\n";
+            $text = $text.slice($i);
         }
-        $matches = $text.matchAll(/~(\\n)$~/, 'g')
-        $text = $prefix.replace(new RegExp('~([^\\n]{' + $width + '})\\ *~'), "\$1\n", $text);
-        $text = rtrim($text, "\n") + ($matches[1] || '');
 
-        if (!$currentLineLength && '' !== $current && "\n" !== substr($current, -1)) {
+        const $matches = [...$text.matchAll(/~(\\n)$~/g)];
+        $text = $prefix.replace(new RegExp('~([^\\n]{' + $width + '})\\ *~'), "$1\n", $text);
+        $text = rtrim($text, "\n") + ($matches[1] ? $matches[1][0] : '');
+
+        if (!$currentLineLength && '' !== $current && "\n" !== $current.slice(-1)) {
             $text = "\n" + $text;
         }
 
-        $lines = $text.split("\n");
+        const $lines = $text.split("\n");
 
-        for (let $line of $lines) {
+        for (const $line of $lines) {
             $currentLineLength += $line.length;
             if ($width <= $currentLineLength) {
                 $currentLineLength = 0;
@@ -269,7 +257,7 @@ class OutputFormatter {
         }
 
         if (this.isDecorated()) {
-            for (let $i in $lines) {
+            for (let $i = 0; $i < $lines.length; $i++) {
                 $lines[$i] = this.$styleStack.getCurrent().apply($lines[$i]);
             }
         }
@@ -277,4 +265,5 @@ class OutputFormatter {
         return $lines.join("\n");
     }
 }
-module.exports = OutputFormatter
+
+export = OutputFormatter;

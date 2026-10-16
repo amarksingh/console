@@ -1,54 +1,55 @@
-const { empty } = require('@ostro/support/function')
-const InvalidArgumentException = require('@ostro/support/exceptions/invalidArgumentException')
-const OutputFormatterStyle = require('./outputFormatterStyle')
+import { empty } from '@ostro/support/function';
+import InvalidArgumentException from '@ostro/support/exceptions/invalidArgumentException';
+import OutputFormatterStyle from './outputFormatterStyle';
 
 /**
  * Class OutputFormatterStyleStack.
  */
 class OutputFormatterStyleStack {
 
+    public $emptyStyle: OutputFormatterStyle;
+    public $styles: OutputFormatterStyle[];
+
     /**
      * Create a new instance.
-     * @param {*} $emptyStyle
+     * @param $emptyStyle - Default empty style.
      */
-    constructor($emptyStyle: any = null) {
+    constructor($emptyStyle: OutputFormatterStyle | null = null) {
         this.$emptyStyle = $emptyStyle || new OutputFormatterStyle();
         this.$styles = [];
     }
 
     /**
-     * reset method.
-     * @returns {any}
+     * Reset the style stack.
      */
-    reset() {
+    public reset(): void {
         this.$styles = [];
     }
 
     /**
-     * push method.
-     * @param {*} $style
-     * @returns {any}
+     * Push a style onto the stack.
+     * @param $style - Style to push.
      */
-    push($style: any) {
+    public push($style: OutputFormatterStyle): void {
         this.$styles.push($style);
     }
 
     /**
-     * pop method.
-     * @param {*} $style
-     * @returns {any}
+     * Pop a style from the stack.
+     * @param $style - Specific style to pop to, or null for top style.
+     * @returns The popped style.
      */
-    pop($style: any = null) {
+    public pop($style: OutputFormatterStyle | null = null): OutputFormatterStyle {
         if (empty(this.$styles)) {
             return this.$emptyStyle;
         }
 
         if (null === $style) {
-            return this.$styles.pop();
+            return this.$styles.pop()!;
         }
-        this.$styles = this.$styles.reverse()
+        this.$styles = this.$styles.reverse();
         for (let $i = 0; $i < this.$styles.length; $i++) {
-            let $stackedStyle = this.$styles[$i]
+            const $stackedStyle = this.$styles[$i];
 
             if ($style.apply('') === $stackedStyle.apply('')) {
                 this.$styles = this.$styles.slice(0, $i);
@@ -61,10 +62,10 @@ class OutputFormatterStyleStack {
     }
 
     /**
-     * getCurrent method.
-     * @returns {any}
+     * Get the current top style.
+     * @returns The current active style.
      */
-    getCurrent() {
+    public getCurrent(): OutputFormatterStyle {
         if (empty(this.$styles)) {
             return this.$emptyStyle;
         }
@@ -73,23 +74,23 @@ class OutputFormatterStyleStack {
     }
 
     /**
-     * setEmptyStyle method.
-     * @param {*} $emptyStyle
-     * @returns {any}
+     * Set the empty fallback style.
+     * @param $emptyStyle - Empty style.
+     * @returns The stack instance.
      */
-    setEmptyStyle($emptyStyle: any) {
+    public setEmptyStyle($emptyStyle: OutputFormatterStyle): this {
         this.$emptyStyle = $emptyStyle;
 
         return this;
     }
 
     /**
-     * getEmptyStyle method.
-     * @returns {any}
+     * Get the empty fallback style.
+     * @returns The empty style.
      */
-    getEmptyStyle() {
+    public getEmptyStyle(): OutputFormatterStyle {
         return this.$emptyStyle;
     }
 }
 
-module.exports = OutputFormatterStyleStack
+export = OutputFormatterStyleStack;

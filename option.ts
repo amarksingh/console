@@ -1,45 +1,60 @@
-const commander = require('commander')
+import { Option as CommanderOption } from 'commander';
+
 /**
  * Class Option.
  */
-class Option{
-	/**
-	 * Create a new instance.
-	 */
-	constructor(){
-		this.$handler = new commander.Option(...arguments);
-	}
-	/**
-	 * hideHelp method.
-	 * @returns {any}
-	 */
-	hideHelp(){
-		this.$handler.hideHelp(...arguments)
-		return this
-	}
-	/**
-	 * default method.
-	 * @returns {any}
-	 */
-	default(){
-		this.$handler.default(...arguments)
-		return this
-	}
-	/**
-	 * choices method.
-	 * @returns {any}
-	 */
-	choices(){
-		this.$handler.choices(...arguments)	
-		return this
-	}
-	/**
-	 * required method.
-	 * @returns {any}
-	 */
-	required(){
-		this.$handler.makeOptionMandatory()
-		return this
-	}
+class Option {
+    public $handler: CommanderOption;
+
+    /**
+     * Create a new instance.
+     * @param flags - The option flags (e.g. '-f, --force').
+     * @param description - The option description.
+     */
+    constructor(flags: string, description?: string) {
+        this.$handler = new CommanderOption(flags, description);
+    }
+
+    /**
+     * Hide option from help.
+     * @param hide - Whether to hide the option from help.
+     * @returns The option instance.
+     */
+    public hideHelp(hide: boolean = true): this {
+        this.$handler.hideHelp(hide);
+        return this;
+    }
+
+    /**
+     * Set the default value.
+     * @param value - The default value.
+     * @param description - Description of the default value.
+     * @returns The option instance.
+     */
+    public default(value: unknown, description?: string): this {
+        this.$handler.default(value, description);
+        return this;
+    }
+
+    /**
+     * Set the allowed choices.
+     * @param values - The allowed choices.
+     * @returns The option instance.
+     */
+    public choices(values: readonly string[]): this {
+        this.$handler.choices(values);
+        return this;
+    }
+
+    /**
+     * Mark the option as mandatory.
+     * @param mandatory - Whether the option is mandatory.
+     * @returns The option instance.
+     */
+    public required(mandatory: boolean = true): this {
+        this.$handler.makeOptionMandatory(mandatory);
+        return this;
+    }
 }
-module.exports = Option
+
+export = Option;
