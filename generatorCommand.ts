@@ -18,7 +18,7 @@ class GeneratorCommand extends Command {
 
     $dirname = __dirname;
 
-    getStub: any;
+    getStub(): any {}
     argument: any;
 
     $reservedNames = [
