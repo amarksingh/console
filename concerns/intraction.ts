@@ -2,11 +2,16 @@ import OutputFormatterStyle from '../outputFormatterStyle';
 import OutputInterface from '../outputInterface';
 import CollectionInterface from '@ostro/contracts/collection/collect';
 import Table from '../helpers/table';
+import { isset } from '@ostro/support/function';
 
 /**
  * Class Interaction.
  */
 class Interaction {
+    input: any;
+    output: any;
+    verbosity: any;
+    askWithCompletion: any;
 
     get $verbosity() {
         return OutputInterface.VERBOSITY_NORMAL
@@ -123,7 +128,7 @@ class Interaction {
         let $table = new Table(this.output);
 
         if ($rows instanceof CollectionInterface) {
-            $rows = $rows.toArray();
+            $rows = ($rows as any).toArray();
         }
 
         $table.setHeaders($headers).setRows($rows).setStyle($tableStyle);
@@ -207,7 +212,7 @@ class Interaction {
      */
     warn($string: any, $verbosity: any = null) {
         if (!this.output.getFormatter().hasStyle('warning')) {
-            $style = new OutputFormatterStyle('yellow');
+            const $style = new OutputFormatterStyle('yellow');
 
             this.output.getFormatter().setStyle('warning', $style);
         }
@@ -221,11 +226,11 @@ class Interaction {
      * @returns {any}
      */
     alert($string: any) {
-        $length = $string + 12;
+        const $length = ($string ? $string.length : 0) + 12;
 
-        this.comment($string.replace('*', $length));
+        this.comment('*'.repeat($length));
         this.comment('*     ' + $string + '     *');
-        this.comment($string.replace('*', $length));
+        this.comment('*'.repeat($length));
 
         return this.newLine();
     }

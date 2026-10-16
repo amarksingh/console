@@ -1,7 +1,13 @@
+declare const InputArgument: any;
+declare const InputOption: any;
+
 /**
  * Class HasParameters.
  */
 class HasParameters {
+    getDefinition: any;
+    addArgument: any;
+    addOption: any;
 
     /**
      * specifyParameters method.
@@ -10,18 +16,18 @@ class HasParameters {
     specifyParameters() {
 
         for (let $arguments of this.getArguments()) {
-            if ($arguments instanceof InputArgument) {
+            if (typeof InputArgument !== 'undefined' && $arguments instanceof InputArgument) {
                 this.getDefinition().addArgument($arguments);
             } else {
-                this.addArgument(...Object.values($arguments));
+                this.addArgument(...Object.values($arguments as any));
             }
         }
 
         for (let $options of this.getOptions()) {
-            if ($options instanceof InputOption) {
+            if (typeof InputOption !== 'undefined' && $options instanceof InputOption) {
                 this.getDefinition().addOption($options);
             } else {
-                this.addOption(...Object.values($options));
+                this.addOption(...Object.values($options as any));
             }
         }
     }
@@ -30,16 +36,16 @@ class HasParameters {
      * getArguments method.
      * @returns {any}
      */
-    getArguments() {
-        return {};
+    getArguments(): any[] {
+        return [];
     }
 
     /**
      * getOptions method.
      * @returns {any}
      */
-    getOptions() {
-        return {};
+    getOptions(): any[] {
+        return [];
     }
 }
 

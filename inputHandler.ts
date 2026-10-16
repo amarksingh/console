@@ -68,11 +68,10 @@ class InputHandler{
 	/**
 	 * getArgument method.
 	 * @param {*} key
-	 * @param {*} value
 	 * @returns {any}
 	 */
-	getArgument(key,value){
-		return this.argument(key,value)
+	getArgument(key?: any){
+		return this.argument(key)
 	}
 	/**
 	 * hasOption method.

@@ -2,6 +2,8 @@
  * Class CallsCommands.
  */
 class CallsCommands {
+    output: any;
+    getConsole: any;
 
     /**
      * callCommand method.
@@ -17,20 +19,21 @@ class CallsCommands {
      * call method.
      * @returns {any}
      */
-    call() {
-        return this.callCommand(...arguments)
+    call(...args: any[]) {
+        return (this.callCommand as any)(...args)
     }
 
     /**
      * runCommand method.
      * @param {*} $command
      * @param {*} $arguments
+     * @param {*} $output
      * @returns {any}
      */
-    runCommand($command: any, $arguments: any) {
+    runCommand($command: any, $arguments: any, $output?: any) {
         const $console = this.getConsole()
         return $console.callCommand(
-            $command, $arguments
+            $command, $arguments, $output
         );
     }
 }

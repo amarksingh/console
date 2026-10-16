@@ -240,7 +240,7 @@ class OutputFormatter {
         }
 
         const $matches = [...$text.matchAll(/~(\\n)$~/g)];
-        $text = $prefix.replace(new RegExp('~([^\\n]{' + $width + '})\\ *~'), "$1\n", $text);
+        $text = ($prefix + $text).replace(new RegExp('~([^\\n]{' + $width + '})\\ *~'), "$1\n");
         $text = rtrim($text, "\n") + ($matches[1] ? $matches[1][0] : '');
 
         if (!$currentLineLength && '' !== $current && "\n" !== $current.slice(-1)) {

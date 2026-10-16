@@ -15,36 +15,48 @@ class Command extends implement(CommandContracts, Interaction, CallCommands, Has
     $app: any;
     $console: any;
 
-    get $signature() {
-        throw Error('$signature must be defined')
+    get $signature(): any {
+        throw Error('$signature must be defined');
+    }
+    set $signature(val: any) {
+        Object.defineProperty(this, '$signature', { value: val, writable: true, configurable: true });
     }
 
-    get $description() {
-        throw Error('$description must be defined')
+    get $description(): any {
+        throw Error('$description must be defined');
+    }
+    set $description(val: any) {
+        Object.defineProperty(this, '$description', { value: val, writable: true, configurable: true });
     }
 
-    get $options() {
-        return []
+    get $options(): any {
+        return [];
+    }
+    set $options(val: any) {
+        Object.defineProperty(this, '$options', { value: val, writable: true, configurable: true });
     }
 
-    get $arguments() {
-        return []
+    get $arguments(): any {
+        return [];
+    }
+    set $arguments(val: any) {
+        Object.defineProperty(this, '$arguments', { value: val, writable: true, configurable: true });
     }
 
     /**
      * createArgument method.
      * @returns {any}
      */
-    createArgument() {
-        return new Argument(...arguments)
+    createArgument(...args: any[]) {
+        return new (Argument as any)(...args)
     }
 
     /**
      * createOption method.
      * @returns {any}
      */
-    createOption() {
-        return new Option(...arguments)
+    createOption(...args: any[]) {
+        return new (Option as any)(...args)
     }
 
     /**

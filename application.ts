@@ -11,18 +11,20 @@ import lodash from 'lodash';
  */
 class Application {
 
-    static $bootstrappers = [];
-    $commands = [];
+    static $bootstrappers: any[] = [];
+    $commands: any[] = [];
+    $app: any;
+    getCommand: any;
 
     /**
      * Create a new instance.
      * @param {*} $app
      */
-    constructor($app: any) {
+    constructor($app?: any) {
         this.$app = $app;
         this.setAutoExit(0);
-        commander.exitOverride(()=>{});
-        commander.showSuggestionAfterError(true);
+        (commander as any).exitOverride(()=>{});
+        (commander as any).showSuggestionAfterError(true);
 
         this.bootstrap();
     }
@@ -32,7 +34,7 @@ class Application {
      * @param {*} status
      * @returns {any}
      */
-    setAutoExit(status: boolean) {
+    setAutoExit(status: any) {
         process.exitCode = status
     }
 
@@ -50,7 +52,7 @@ class Application {
      * @returns {any}
      */
     run($input: any[] = []) {
-        return commander.parseAsync($input, {
+        return (commander as any).parseAsync($input, {
             from: 'user'
         })
 
@@ -108,8 +110,8 @@ class Application {
      * callCommand method.
      * @returns {any}
      */
-    callCommand() {
-        return this.call(...arguments)
+    callCommand(...args: any[]) {
+        return (this.call as any)(...args)
     }
 
     /**
@@ -232,7 +234,7 @@ class Application {
         this.$commands.push(command.$signature);
         let options = command.$options || [];
         let commandArguments = command.$arguments || [];
-        let cmd = commander.command(command.$signature);
+        let cmd = (commander as any).command(command.$signature);
 
         cmd.description(command.$description);
 

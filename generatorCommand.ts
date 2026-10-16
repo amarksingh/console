@@ -1,17 +1,25 @@
 import Command from './command';
-import { rtrim, trim } from '@ostro/support/function';
+import { rtrim, trim, ltrim } from '@ostro/support/function';
 import StringHelper from '@ostro/support/string';
+import path, { dirname } from 'path';
+
+declare const isDirectory: any;
+declare const app_path: any;
+declare const resource_path: any;
 
 /**
  * Class GeneratorCommand.
  */
 class GeneratorCommand extends Command {
 
-    $file;
+    $file: any;
 
-    $type;
+    $type: any;
 
     $dirname = __dirname;
+
+    getStub: any;
+    argument: any;
 
     $reservedNames = [
         'abstract',
@@ -50,9 +58,11 @@ class GeneratorCommand extends Command {
         'yield',
     ];
 
-    $arguments = [
-        this.createArgument('name', 'The name of the migration').required()
-    ];
+    get $arguments(): any {
+        return [
+            this.createArgument('name', 'The name of the migration').required()
+        ];
+    }
 
     /**
      * Create a new instance.
@@ -113,7 +123,7 @@ class GeneratorCommand extends Command {
             return $name;
         }
         return this.qualifyClass(
-            path.join(this.getDefaultNamespace(String.trimEnd($rootNamespace, path.sep)), $name)
+            path.join(this.getDefaultNamespace(rtrim($rootNamespace, path.sep)), $name)
         );
     }
 
@@ -136,7 +146,7 @@ class GeneratorCommand extends Command {
 
         let $rootNamespace = this.rootNamespace();
 
-        if (String.startsWith($model, $rootNamespace)) {
+        if (typeof $model === 'string' && $model.startsWith($rootNamespace)) {
             return $model;
         }
 
@@ -163,7 +173,7 @@ class GeneratorCommand extends Command {
         $name = path.normalize($name)
         let lastSlash = $name.lastIndexOf(path.sep)
         lastSlash = lastSlash > -1 ? lastSlash : 0
-        return String.trim($name.slice(lastSlash, $name.length), path.sep)
+        return trim($name.slice(lastSlash, $name.length), path.sep)
     }
 
     /**
@@ -172,7 +182,7 @@ class GeneratorCommand extends Command {
      * @returns {any}
      */
     getPath($name: string) {
-        let $class = this.getFileName($name).camelCase()
+        let $class = StringHelper.camel(this.getFileName($name))
         let namespace = this.getNamespace($name).replace(this.rootNamespace(), '')
         return this.rootNamespace(path.join(namespace, $class + ".js"))
     }
@@ -195,8 +205,8 @@ class GeneratorCommand extends Command {
      * @returns {any}
      */
     resolveStubPath($stub: any) {
-        let $customPath = this.$app.basePath(String.trim($stub, '/'))
-        return this.$file.exists($customPath).then($exists => ($exists ? $customPath : path.join(this.$dirname, $stub)))
+        let $customPath = this.$app.basePath(trim($stub, '/'))
+        return this.$file.exists($customPath).then(($exists: any) => ($exists ? $customPath : path.join(this.$dirname, $stub)))
     }
 
     /**
@@ -285,7 +295,7 @@ class GeneratorCommand extends Command {
      * @param {*} $path
      * @returns {any}
      */
-    rootNamespace($path: string) {
+    rootNamespace($path: string = '') {
         return this.$app.basePath($path);
     }
 
@@ -318,9 +328,9 @@ class GeneratorCommand extends Command {
      * @returns {any}
      */
     viewPath($path: string = '') {
-        $views = this.$app['config']['view.paths'][0] || resource_path('views');
+        const $views = this.$app['config']['view.paths'][0] || (typeof resource_path === 'function' ? resource_path('views') : '');
 
-        return $views + ($path ? pat.sep + $path : $path);
+        return $views + ($path ? path.sep + $path : $path);
     }
 
 }

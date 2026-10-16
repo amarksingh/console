@@ -2,10 +2,16 @@ import readline from 'readline';
 import OutputFormatter from './outputFormatter';
 import OutputInterface from './outputInterface';
 
+function strip_tags(str: string): string {
+    return str.replace(/<[^>]*>/g, '');
+}
+
 /**
  * Class OutputHandler.
  */
 class OutputHandler {
+
+    output: any;
 
     $verbosity;
 
@@ -112,7 +118,7 @@ class OutputHandler {
      * @param {*} $options
      * @returns {any}
      */
-    writeln($messages: any, $options: Record<string, any> = OutputInterface.OUTPUT_NORMAL) {
+    writeln($messages: any, $options: any = OutputInterface.OUTPUT_NORMAL) {
         return this.write($messages, true, $options);
     }
 
@@ -123,7 +129,7 @@ class OutputHandler {
      * @param {*} $options
      * @returns {any}
      */
-    write($messages: any, $newline: boolean = false, $options: Record<string, any> = OutputInterface.OUTPUT_NORMAL) {
+    write($messages: any, $newline: boolean = false, $options: any = OutputInterface.OUTPUT_NORMAL) {
 
         if (!Array.isArray($messages)) {
             $messages = [$messages];
@@ -174,8 +180,8 @@ class OutputHandler {
      * @returns {any}
      */
     confirm($question: any, $default: boolean = false) {
-        return this.question($question).then(res => {
-            if (res.toLowerCase() == 'y') {
+        return this.question($question).then((res: any) => {
+            if (String(res).toLowerCase() == 'y') {
                 return $default || true
             } else {
                 return $default || false
@@ -190,7 +196,9 @@ class OutputHandler {
      * @returns {any}
      */
     ask($question: any, $default: any = null) {
-        return this.output.ask($question, $default);
+        return this.question($question).then((res: any) => {
+            return res || $default;
+        });
     }
 
     /**
