@@ -1,5 +1,7 @@
-const Argument = require('../argument');
-const Option = require('../option');
+const _Argument = require('../argument');
+const Argument = _Argument.default || _Argument;
+const _Option = require('../option');
+const Option = _Option.default || _Option;
 
 describe('Argument and Option Unit Tests', () => {
 

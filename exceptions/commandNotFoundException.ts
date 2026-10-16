@@ -21,4 +21,4 @@ class CommandNotFoundException extends CommandNotFoundExceptionContract {
     }
 }
 
-export = CommandNotFoundException;
+export default CommandNotFoundException;

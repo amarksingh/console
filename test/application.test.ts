@@ -1,5 +1,7 @@
-const Application = require('../application');
-const Command = require('../command');
+const _Application = require('../application');
+const Application = _Application.default || _Application;
+const _Command = require('../command');
+const Command = _Command.default || _Command;
 
 class TestAppCommand extends Command {
     get $signature() {

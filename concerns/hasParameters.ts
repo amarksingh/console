@@ -43,4 +43,4 @@ class HasParameters {
     }
 }
 
-module.exports = HasParameters
+export default HasParameters;

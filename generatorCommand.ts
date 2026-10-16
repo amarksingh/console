@@ -1,6 +1,6 @@
-const Command = require('./command')
-const { rtrim, trim } = require('@ostro/support/function')
-const StringHelper = require('@ostro/support/string')
+import Command from './command';
+import { rtrim, trim } from '@ostro/support/function';
+import StringHelper from '@ostro/support/string';
 
 /**
  * Class GeneratorCommand.
@@ -325,4 +325,4 @@ class GeneratorCommand extends Command {
 
 }
 
-module.exports = GeneratorCommand
+export default GeneratorCommand;

@@ -47,4 +47,4 @@ class Argument {
     }
 }
 
-export = Argument;
+export default Argument;

@@ -35,4 +35,4 @@ class CallsCommands {
     }
 }
 
-module.exports = CallsCommands
+export default CallsCommands;

@@ -93,4 +93,4 @@ class OutputFormatterStyleStack {
     }
 }
 
-export = OutputFormatterStyleStack;
+export default OutputFormatterStyleStack;

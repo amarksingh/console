@@ -1,5 +1,6 @@
-const OutputFormatter = require('./outputFormatter')
-const OutputInterface = require('./outputInterface')
+import readline from 'readline';
+import OutputFormatter from './outputFormatter';
+import OutputInterface from './outputInterface';
 
 /**
  * Class OutputHandler.
@@ -199,12 +200,12 @@ class OutputHandler {
      */
     question($question: any) {
         return new Promise((resolve, reject) => {
-            const readline = require('readline').createInterface({
+            const rl = readline.createInterface({
                 input: process.stdin,
                 output: process.stdout
             });
-            readline.question($question, function (answer) {
-                readline.close();
+            rl.question($question, function (answer) {
+                rl.close();
                 resolve(answer)
             })
         })
@@ -225,4 +226,4 @@ class OutputHandler {
     }
 
 }
-module.exports = OutputHandler
+export default OutputHandler;

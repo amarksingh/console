@@ -1,10 +1,10 @@
-var { parseArgsStringToArgv } = require('string-argv');
-const commander = require('commander');
-const InputHandler = require('./inputHandler')
-const OutputHandler = require('./outputHandler')
-const Command = require('./command')
-const CommandNotFoundException = require('./exceptions/commandNotFoundException')
-const lodash = require("lodash")
+import { parseArgsStringToArgv } from 'string-argv';
+import commander from 'commander';
+import InputHandler from './inputHandler';
+import OutputHandler from './outputHandler';
+import Command from './command';
+import CommandNotFoundException from './exceptions/commandNotFoundException';
+import lodash from 'lodash';
 
 /**
  * Class Application.
@@ -272,4 +272,4 @@ class Application {
     }
 }
 
-module.exports = Application
+export default Application;

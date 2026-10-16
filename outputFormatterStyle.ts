@@ -99,4 +99,4 @@ class OutputFormatterStyle {
     }
 }
 
-export = OutputFormatterStyle;
+export default OutputFormatterStyle;

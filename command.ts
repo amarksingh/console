@@ -1,12 +1,12 @@
 import type { ICommand } from '@ostro/contracts/console/command';
 
-const Argument = require('./argument');
-const Option = require('./option');
-const CommandContracts = require('@ostro/contracts/console/command');
-const { implement } = require('@ostro/support/function');
-const Interaction = require('./concerns/intraction');
-const HasParameters = require('./concerns/hasParameters');
-const CallCommands = require('./concerns/callsCommands');
+import Argument from './argument';
+import Option from './option';
+import CommandContracts from '@ostro/contracts/console/command';
+import { implement } from '@ostro/support/function';
+import Interaction from './concerns/intraction';
+import HasParameters from './concerns/hasParameters';
+import CallCommands from './concerns/callsCommands';
 
 /**
  * Class Command.
@@ -98,4 +98,4 @@ class Command extends implement(CommandContracts, Interaction, CallCommands, Has
     }
 }
 
-module.exports = Command
+export default Command;

@@ -57,4 +57,4 @@ class Option {
     }
 }
 
-export = Option;
+export default Option;

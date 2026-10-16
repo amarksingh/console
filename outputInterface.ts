@@ -69,4 +69,4 @@ class OutputInterface {
 
 }
 
-export = OutputInterface;
+export default OutputInterface;

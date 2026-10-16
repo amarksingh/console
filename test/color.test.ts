@@ -1,4 +1,5 @@
-const Color = require('../color');
+const _Color = require('../color');
+const Color = _Color.default || _Color;
 
 describe('Color Unit Tests', () => {
 

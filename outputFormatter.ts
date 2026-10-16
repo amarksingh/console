@@ -266,4 +266,4 @@ class OutputFormatter {
     }
 }
 
-export = OutputFormatter;
+export default OutputFormatter;

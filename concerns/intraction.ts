@@ -1,7 +1,7 @@
-const OutputFormatterStyle = require('../outputFormatterStyle')
-const OutputInterface = require('../outputInterface')
-const CollectionInterface = require('@ostro/contracts/collection/collect')
-const Table = require('../helpers/table')
+import OutputFormatterStyle from '../outputFormatterStyle';
+import OutputInterface from '../outputInterface';
+import CollectionInterface from '@ostro/contracts/collection/collect';
+import Table from '../helpers/table';
 
 /**
  * Class Interaction.
@@ -298,4 +298,4 @@ class Interaction {
     }
 }
 
-module.exports = Interaction
+export default Interaction;
