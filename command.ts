@@ -12,34 +12,34 @@ import CallCommands from './concerns/callsCommands';
  * Class Command.
  */
 class Command extends implement(CommandContracts, Interaction, CallCommands, HasParameters) implements ICommand {
-    $app: any;
-    $console: any;
+    public $app: any;
+    public $console: any;
 
-    get $signature(): any {
+    public get $signature(): any {
         throw Error('$signature must be defined');
     }
-    set $signature(val: any) {
+    public set $signature(val: any) {
         Object.defineProperty(this, '$signature', { value: val, writable: true, configurable: true });
     }
 
-    get $description(): any {
+    public get $description(): any {
         throw Error('$description must be defined');
     }
-    set $description(val: any) {
+    public set $description(val: any) {
         Object.defineProperty(this, '$description', { value: val, writable: true, configurable: true });
     }
 
-    get $options(): any {
+    public get $options(): any {
         return [];
     }
-    set $options(val: any) {
+    public set $options(val: any) {
         Object.defineProperty(this, '$options', { value: val, writable: true, configurable: true });
     }
 
-    get $arguments(): any {
+    public get $arguments(): any {
         return [];
     }
-    set $arguments(val: any) {
+    public set $arguments(val: any) {
         Object.defineProperty(this, '$arguments', { value: val, writable: true, configurable: true });
     }
 
@@ -47,7 +47,7 @@ class Command extends implement(CommandContracts, Interaction, CallCommands, Has
      * createArgument method.
      * @returns {any}
      */
-    createArgument(...args: any[]) {
+    public createArgument(...args: any[]) {
         return new (Argument as any)(...args)
     }
 
@@ -55,7 +55,7 @@ class Command extends implement(CommandContracts, Interaction, CallCommands, Has
      * createOption method.
      * @returns {any}
      */
-    createOption(...args: any[]) {
+    public createOption(...args: any[]) {
         return new (Option as any)(...args)
     }
 
@@ -63,7 +63,7 @@ class Command extends implement(CommandContracts, Interaction, CallCommands, Has
      * getApp method.
      * @returns {any}
      */
-    getApp() {
+    public getApp() {
         return this.$app;
     }
 
@@ -72,7 +72,7 @@ class Command extends implement(CommandContracts, Interaction, CallCommands, Has
      * @param {*} $app
      * @returns {any}
      */
-    setApp($app: any) {
+    public setApp($app: any) {
         this.$app = $app;
     }
 
@@ -81,7 +81,7 @@ class Command extends implement(CommandContracts, Interaction, CallCommands, Has
      * @param {*} $console
      * @returns {any}
      */
-    setConsole($console: any) {
+    public setConsole($console: any) {
         this.$console = $console
     }
 
@@ -89,7 +89,7 @@ class Command extends implement(CommandContracts, Interaction, CallCommands, Has
      * getConsole method.
      * @returns {any}
      */
-    getConsole() {
+    public getConsole() {
         return this.$console
     }
 
@@ -97,7 +97,7 @@ class Command extends implement(CommandContracts, Interaction, CallCommands, Has
      * execute method.
      * @returns {any}
      */
-    execute() {
+    public execute() {
         let $method = typeof this['handle'] == 'function' ? 'handle' : '__invoke';
         return this.$app.call(this, $method);
     }
@@ -105,7 +105,7 @@ class Command extends implement(CommandContracts, Interaction, CallCommands, Has
      * __invoke method.
      * @returns {any}
      */
-    __invoke() {
+    public __invoke() {
         throw Error('class should have either handle or __invike function')
     }
 }

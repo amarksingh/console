@@ -5,15 +5,15 @@ declare const InputOption: any;
  * Class HasParameters.
  */
 class HasParameters {
-    getDefinition: any;
-    addArgument: any;
-    addOption: any;
+    public getDefinition: any;
+    public addArgument: any;
+    public addOption: any;
 
     /**
      * specifyParameters method.
      * @returns {any}
      */
-    specifyParameters() {
+    public specifyParameters() {
 
         for (let $arguments of this.getArguments()) {
             if (typeof InputArgument !== 'undefined' && $arguments instanceof InputArgument) {
@@ -36,7 +36,7 @@ class HasParameters {
      * getArguments method.
      * @returns {any}
      */
-    getArguments(): any[] {
+    public getArguments(): any[] {
         return [];
     }
 
@@ -44,7 +44,7 @@ class HasParameters {
      * getOptions method.
      * @returns {any}
      */
-    getOptions(): any[] {
+    public getOptions(): any[] {
         return [];
     }
 }

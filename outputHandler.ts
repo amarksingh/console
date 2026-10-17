@@ -11,7 +11,7 @@ function strip_tags(str: string): string {
  */
 class OutputHandler {
 
-    output: any;
+    public output: any;
 
     $verbosity;
 
@@ -34,7 +34,7 @@ class OutputHandler {
      * @param {*} $formatter
      * @returns {any}
      */
-    setFormatter($formatter: any) {
+    public setFormatter($formatter: any) {
         this.$formatter = $formatter;
     }
 
@@ -42,7 +42,7 @@ class OutputHandler {
      * getFormatter method.
      * @returns {any}
      */
-    getFormatter() {
+    public getFormatter() {
         return this.$formatter;
     }
 
@@ -51,7 +51,7 @@ class OutputHandler {
      * @param {*} $decorated
      * @returns {any}
      */
-    setDecorated($decorated: any) {
+    public setDecorated($decorated: any) {
         this.$formatter.setDecorated($decorated);
     }
 
@@ -59,7 +59,7 @@ class OutputHandler {
      * isDecorated method.
      * @returns {any}
      */
-    isDecorated() {
+    public isDecorated() {
         return this.$formatter.isDecorated();
     }
 
@@ -68,7 +68,7 @@ class OutputHandler {
      * @param {*} $level
      * @returns {any}
      */
-    setVerbosity($level: any) {
+    public setVerbosity($level: any) {
         this.$verbosity = $level;
     }
 
@@ -76,7 +76,7 @@ class OutputHandler {
      * getVerbosity method.
      * @returns {any}
      */
-    getVerbosity() {
+    public getVerbosity() {
         return this.$verbosity;
     }
 
@@ -84,7 +84,7 @@ class OutputHandler {
      * isQuiet method.
      * @returns {any}
      */
-    isQuiet() {
+    public isQuiet() {
         return OutputInterface.VERBOSITY_QUIET === this.$verbosity;
     }
 
@@ -92,7 +92,7 @@ class OutputHandler {
      * isVerbose method.
      * @returns {any}
      */
-    isVerbose() {
+    public isVerbose() {
         return OutputInterface.VERBOSITY_VERBOSE <= this.$verbosity;
     }
 
@@ -100,7 +100,7 @@ class OutputHandler {
      * isVeryVerbose method.
      * @returns {any}
      */
-    isVeryVerbose() {
+    public isVeryVerbose() {
         return OutputInterface.VERBOSITY_VERY_VERBOSE <= this.$verbosity;
     }
 
@@ -108,7 +108,7 @@ class OutputHandler {
      * isDebug method.
      * @returns {any}
      */
-    isDebug() {
+    public isDebug() {
         return OutputInterface.VERBOSITY_DEBUG <= this.$verbosity;
     }
 
@@ -118,7 +118,7 @@ class OutputHandler {
      * @param {*} $options
      * @returns {any}
      */
-    writeln($messages: any, $options: any = OutputInterface.OUTPUT_NORMAL) {
+    public writeln($messages: any, $options: any = OutputInterface.OUTPUT_NORMAL) {
         return this.write($messages, true, $options);
     }
 
@@ -129,7 +129,7 @@ class OutputHandler {
      * @param {*} $options
      * @returns {any}
      */
-    write($messages: any, $newline: boolean = false, $options: any = OutputInterface.OUTPUT_NORMAL) {
+    public write($messages: any, $newline: boolean = false, $options: any = OutputInterface.OUTPUT_NORMAL) {
 
         if (!Array.isArray($messages)) {
             $messages = [$messages];
@@ -167,7 +167,7 @@ class OutputHandler {
      * @param {*} $count
      * @returns {any}
      */
-    newLine($count: number = 1) {
+    public newLine($count: number = 1) {
         let $message = '\n'.repeat($count)
         process.stdout.write($message)
         return this
@@ -179,7 +179,7 @@ class OutputHandler {
      * @param {*} $default
      * @returns {any}
      */
-    confirm($question: any, $default: boolean = false) {
+    public confirm($question: any, $default: boolean = false) {
         return this.question($question).then((res: any) => {
             if (String(res).toLowerCase() == 'y') {
                 return $default || true
@@ -195,7 +195,7 @@ class OutputHandler {
      * @param {*} $default
      * @returns {any}
      */
-    ask($question: any, $default: any = null) {
+    public ask($question: any, $default: any = null) {
         return this.question($question).then((res: any) => {
             return res || $default;
         });
@@ -206,7 +206,7 @@ class OutputHandler {
      * @param {*} $question
      * @returns {any}
      */
-    question($question: any) {
+    public question($question: any) {
         return new Promise((resolve, reject) => {
             const rl = readline.createInterface({
                 input: process.stdin,
@@ -226,7 +226,7 @@ class OutputHandler {
      * @param {*} $newline
      * @returns {any}
      */
-    doWrite($message: string, $newline: any) {
+    public doWrite($message: string, $newline: any) {
         process.stdout.write(Buffer.from($message))
         if ($newline)
             this.newLine()

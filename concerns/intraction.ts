@@ -8,15 +8,15 @@ import { isset } from '@ostro/support/function';
  * Class Interaction.
  */
 class Interaction {
-    input: any;
-    output: any;
-    verbosity: any;
-    askWithCompletion: any;
+    public input: any;
+    public output: any;
+    public verbosity: any;
+    public askWithCompletion: any;
 
-    get $verbosity() {
+    public get $verbosity() {
         return OutputInterface.VERBOSITY_NORMAL
     }
-    get $verbosityMap() {
+    public get $verbosityMap() {
         return {
             'v': OutputInterface.VERBOSITY_VERBOSE,
             'vv': OutputInterface.VERBOSITY_VERY_VERBOSE,
@@ -31,7 +31,7 @@ class Interaction {
      * @param {*} $name
      * @returns {any}
      */
-    hasArgument($name: string) {
+    public hasArgument($name: string) {
         return this.input.hasArgument($name);
     }
 
@@ -40,7 +40,7 @@ class Interaction {
      * @param {*} $key
      * @returns {any}
      */
-    argument($key: any = null) {
+    public argument($key: any = null) {
         if ($key == null) {
             return this.input.getArguments();
         }
@@ -52,7 +52,7 @@ class Interaction {
      * arguments method.
      * @returns {any}
      */
-    arguments() {
+    public arguments() {
         return this.argument();
     }
 
@@ -61,7 +61,7 @@ class Interaction {
      * @param {*} $name
      * @returns {any}
      */
-    hasOption($name: string) {
+    public hasOption($name: string) {
         return this.input.hasOption($name);
     }
 
@@ -70,7 +70,7 @@ class Interaction {
      * @param {*} $key
      * @returns {any}
      */
-    option($key: any = null) {
+    public option($key: any = null) {
         if ($key == null) {
             return this.input.getOption();
         }
@@ -81,7 +81,7 @@ class Interaction {
      * options method.
      * @returns {any}
      */
-    options() {
+    public options() {
         return this.option();
     }
 
@@ -91,7 +91,7 @@ class Interaction {
      * @param {*} $default
      * @returns {any}
      */
-    confirm($question: any, $default: boolean = false) {
+    public confirm($question: any, $default: boolean = false) {
         return this.output.confirm($question, $default);
     }
 
@@ -101,7 +101,7 @@ class Interaction {
      * @param {*} $default
      * @returns {any}
      */
-    ask($question: any, $default: any = null) {
+    public ask($question: any, $default: any = null) {
         return this.output.ask($question, $default);
     }
 
@@ -112,7 +112,7 @@ class Interaction {
      * @param {*} $default
      * @returns {any}
      */
-    anticipate($question: any, $choices: any, $default: any = null) {
+    public anticipate($question: any, $choices: any, $default: any = null) {
         return this.askWithCompletion($question, $choices, $default);
     }
 
@@ -124,7 +124,7 @@ class Interaction {
      * @param {*} $columnStyles
      * @returns {any}
      */
-    table($headers: Record<string, any>, $rows: any, $tableStyle: string = 'default', $columnStyles: any[] = []) {
+    public table($headers: Record<string, any>, $rows: any, $tableStyle: string = 'default', $columnStyles: any[] = []) {
         let $table = new Table(this.output);
 
         if ($rows instanceof CollectionInterface) {
@@ -147,7 +147,7 @@ class Interaction {
      * @param {*} $verbosity
      * @returns {any}
      */
-    info($string: any, $verbosity: any = null) {
+    public info($string: any, $verbosity: any = null) {
         return this.line($string, 'info', $verbosity);
     }
 
@@ -158,7 +158,7 @@ class Interaction {
      * @param {*} $verbosity
      * @returns {any}
      */
-    line($string: any, $style: any = null, $verbosity: any = null) {
+    public line($string: any, $style: any = null, $verbosity: any = null) {
         let $styled = $style ? `<${$style}>${$string}</${$style}>` : $string;
 
         return this.output.writeln($styled, this.parseVerbosity($verbosity));
@@ -170,7 +170,7 @@ class Interaction {
      * @param {*} $verbosity
      * @returns {any}
      */
-    comment($string: any, $verbosity: any = null) {
+    public comment($string: any, $verbosity: any = null) {
         return this.line($string, 'comment', $verbosity);
     }
 
@@ -180,7 +180,7 @@ class Interaction {
      * @param {*} $verbosity
      * @returns {any}
      */
-    question($string: any, $verbosity: any = null) {
+    public question($string: any, $verbosity: any = null) {
         return this.output.question($string, $verbosity);
     }
 
@@ -190,7 +190,7 @@ class Interaction {
      * @param {*} $verbosity
      * @returns {any}
      */
-    error($string: any, $verbosity: any = null) {
+    public error($string: any, $verbosity: any = null) {
         return this.line($string, 'error', $verbosity);
     }
 
@@ -200,7 +200,7 @@ class Interaction {
      * @param {*} $verbosity
      * @returns {any}
      */
-    success($string: any, $verbosity: any = null) {
+    public success($string: any, $verbosity: any = null) {
         return this.line($string, 'success', $verbosity);
     }
 
@@ -210,7 +210,7 @@ class Interaction {
      * @param {*} $verbosity
      * @returns {any}
      */
-    warn($string: any, $verbosity: any = null) {
+    public warn($string: any, $verbosity: any = null) {
         if (!this.output.getFormatter().hasStyle('warning')) {
             const $style = new OutputFormatterStyle('yellow');
 
@@ -225,7 +225,7 @@ class Interaction {
      * @param {*} $string
      * @returns {any}
      */
-    alert($string: any) {
+    public alert($string: any) {
         const $length = ($string ? $string.length : 0) + 12;
 
         this.comment('*'.repeat($length));
@@ -240,7 +240,7 @@ class Interaction {
      * @param {*} $count
      * @returns {any}
      */
-    newLine($count: number = 1) {
+    public newLine($count: number = 1) {
         return this.output.newLine($count);
     }
 
@@ -249,7 +249,7 @@ class Interaction {
      * @param {*} $input
      * @returns {any}
      */
-    setInput($input: any) {
+    public setInput($input: any) {
         return this.input = $input;
     }
 
@@ -258,7 +258,7 @@ class Interaction {
      * @param {*} $output
      * @returns {any}
      */
-    setOutput($output: any) {
+    public setOutput($output: any) {
         return this.output = $output;
     }
 
@@ -266,7 +266,7 @@ class Interaction {
      * getOutput method.
      * @returns {any}
      */
-    getOutput() {
+    public getOutput() {
         return this.output;
     }
 
@@ -274,7 +274,7 @@ class Interaction {
      * confirmToProceed method.
      * @returns {any}
      */
-    confirmToProceed() {
+    public confirmToProceed() {
         return this.confirm('Are you sure want to process ? (y/n) : ')
     }
 
@@ -283,7 +283,7 @@ class Interaction {
      * @param {*} $level
      * @returns {any}
      */
-    setVerbosity($level: any) {
+    public setVerbosity($level: any) {
         return this.verbosity = this.parseVerbosity($level);
     }
 
@@ -292,7 +292,7 @@ class Interaction {
      * @param {*} $level
      * @returns {any}
      */
-    parseVerbosity($level: any = null) {
+    public parseVerbosity($level: any = null) {
         if ($level && isset(this.$verbosityMap[$level])) {
             $level = this.$verbosityMap[$level];
         } else if (!Number.isInteger($level)) {

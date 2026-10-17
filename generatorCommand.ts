@@ -12,16 +12,16 @@ declare const resource_path: any;
  */
 class GeneratorCommand extends Command {
 
-    $file: any;
+    public $file: any;
 
-    $type: any;
+    public $type: any;
 
-    get $dirname(): string {
+    public get $dirname(): string {
         return __dirname;
     }
 
-    getStub(): any {}
-    argument: any;
+    public getStub(): any {}
+    public argument: any;
 
     $reservedNames = [
         'abstract',
@@ -60,7 +60,7 @@ class GeneratorCommand extends Command {
         'yield',
     ];
 
-    get $arguments(): any {
+    public get $arguments(): any {
         return [
             this.createArgument('name', 'The name of the migration').required()
         ];
@@ -81,7 +81,7 @@ class GeneratorCommand extends Command {
      * @async
      * @returns {any}
      */
-    async handle() {
+    public async handle() {
         let $name = this.getNameInput()
 
         if (this.isReservedName($name)) {
@@ -117,7 +117,7 @@ class GeneratorCommand extends Command {
      * @param {*} $name
      * @returns {any}
      */
-    qualifyClass($name: string) {
+    public qualifyClass($name: string) {
         $name = $name.trim()
         let $rootNamespace = this.rootNamespace();
 
@@ -134,7 +134,7 @@ class GeneratorCommand extends Command {
      * @param {*} $rootNamespace
      * @returns {any}
      */
-    getDefaultNamespace($rootNamespace: any) {
+    public getDefaultNamespace($rootNamespace: any) {
         return $rootNamespace;
     }
 
@@ -143,7 +143,7 @@ class GeneratorCommand extends Command {
      * @param {*} $model
      * @returns {any}
      */
-    qualifyModel($model: any) {
+    public qualifyModel($model: any) {
         $model = ltrim($model, '/');
 
         let $rootNamespace = this.rootNamespace();
@@ -162,7 +162,7 @@ class GeneratorCommand extends Command {
      * @param {*} $rawName
      * @returns {any}
      */
-    alreadyExists($rawName: any) {
+    public alreadyExists($rawName: any) {
         return this.$file.exists($rawName)
     }
 
@@ -171,7 +171,7 @@ class GeneratorCommand extends Command {
      * @param {*} $name
      * @returns {any}
      */
-    getFileName($name: string) {
+    public getFileName($name: string) {
         $name = path.normalize($name)
         let lastSlash = $name.lastIndexOf(path.sep)
         lastSlash = lastSlash > -1 ? lastSlash : 0
@@ -183,7 +183,7 @@ class GeneratorCommand extends Command {
      * @param {*} $name
      * @returns {any}
      */
-    getPath($name: string) {
+    public getPath($name: string) {
         let $class = StringHelper.camel(this.getFileName($name))
         let namespace = this.getNamespace($name).replace(this.rootNamespace(), '')
         return this.rootNamespace(path.join(namespace, $class + ".js"))
@@ -195,7 +195,7 @@ class GeneratorCommand extends Command {
      * @param {*} $path
      * @returns {any}
      */
-    async makeDirectory($path: string) {
+    public async makeDirectory($path: string) {
         await this.$file.makeDirectory(dirname($path), 0o755, true, true);
 
         return $path;
@@ -206,7 +206,7 @@ class GeneratorCommand extends Command {
      * @param {*} $stub
      * @returns {any}
      */
-    resolveStubPath($stub: any) {
+    public resolveStubPath($stub: any) {
         let $customPath = this.$app.basePath(trim($stub, '/'))
         return this.$file.exists($customPath).then(($exists: any) => ($exists ? $customPath : path.join(this.$dirname, $stub)))
     }
@@ -217,7 +217,7 @@ class GeneratorCommand extends Command {
      * @param {*} $name
      * @returns {any}
      */
-    async buildClass($name: string) {
+    public async buildClass($name: string) {
         let $stub = await this.getStub()
         return this.$file.get($stub)
             .then($stub => {
@@ -234,7 +234,7 @@ class GeneratorCommand extends Command {
      * @param {*} $name
      * @returns {any}
      */
-    replaceNamespace($stub: any, $name: string) {
+    public replaceNamespace($stub: any, $name: string) {
         let $searches = {
             'DummyNamespace': this.getNamespace($name),
             'DummyRootNamespace': this.getNamespace($name),
@@ -259,7 +259,7 @@ class GeneratorCommand extends Command {
      * @param {*} $name
      * @returns {any}
      */
-    getNamespace($name: string) {
+    public getNamespace($name: string) {
         $name = path.normalize($name)
         return rtrim($name.slice(0, $name.lastIndexOf(path.sep)), path.sep);
     }
@@ -270,7 +270,7 @@ class GeneratorCommand extends Command {
      * @param {*} $name
      * @returns {any}
      */
-    replaceClass($stub: any, $name: string) {
+    public replaceClass($stub: any, $name: string) {
         let $class = StringHelper.ucfirst(StringHelper.pascal(this.getFileName($name)));
         return StringHelper.replaceAll($stub, ['DummyClass', '{{ class }}', '{{class}}'], $class);
     }
@@ -280,7 +280,7 @@ class GeneratorCommand extends Command {
      * @param {*} $stub
      * @returns {any}
      */
-    sortImports($stub: any) {
+    public sortImports($stub: any) {
         return $stub;
     }
 
@@ -288,7 +288,7 @@ class GeneratorCommand extends Command {
      * getNameInput method.
      * @returns {any}
      */
-    getNameInput() {
+    public getNameInput() {
         return trim(this.argument('name'));
     }
 
@@ -297,7 +297,7 @@ class GeneratorCommand extends Command {
      * @param {*} $path
      * @returns {any}
      */
-    rootNamespace($path: string = '') {
+    public rootNamespace($path: string = '') {
         return this.$app.basePath($path);
     }
 
@@ -305,7 +305,7 @@ class GeneratorCommand extends Command {
      * userProviderModel method.
      * @returns {any}
      */
-    userProviderModel() {
+    public userProviderModel() {
         let $config = this.$app['config'];
 
         let $provider = $config.get('auth.guards.' + $config.get('auth.defaults.guard') + '.provider');
@@ -318,7 +318,7 @@ class GeneratorCommand extends Command {
      * @param {*} $name
      * @returns {any}
      */
-    isReservedName($name: string) {
+    public isReservedName($name: string) {
         $name = $name.toLowerCase();
 
         return this.$reservedNames.indexOf($name) > -1;
@@ -329,7 +329,7 @@ class GeneratorCommand extends Command {
      * @param {*} $path
      * @returns {any}
      */
-    viewPath($path: string = '') {
+    public viewPath($path: string = '') {
         const $views = this.$app['config']['view.paths'][0] || (typeof resource_path === 'function' ? resource_path('views') : '');
 
         return $views + ($path ? path.sep + $path : $path);

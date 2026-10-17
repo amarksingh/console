@@ -47,5 +47,9 @@
   "bugs": {
     "url": "https://github.com/ostrojs/console/issues"
   },
-  "homepage": "https://github.com/ostrojs/console#readme"
+  "homepage": "https://github.com/ostrojs/console#readme",
+  "devDependencies": {
+    "typescript": "^5.8.0",
+    "@types/node": "^22.0.0"
+  }
 }

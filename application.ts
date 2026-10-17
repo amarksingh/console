@@ -12,9 +12,9 @@ import lodash from 'lodash';
 class Application {
 
     static $bootstrappers: any[] = [];
-    $commands: any[] = [];
-    $app: any;
-    getCommand: any;
+    public $commands: any[] = [];
+    public $app: any;
+    public getCommand: any;
 
     /**
      * Create a new instance.
@@ -34,7 +34,7 @@ class Application {
      * @param {*} status
      * @returns {any}
      */
-    setAutoExit(status: any) {
+    public setAutoExit(status: any) {
         process.exitCode = status
     }
 
@@ -42,7 +42,7 @@ class Application {
      * getAutoExit method.
      * @returns {any}
      */
-    getAutoExit() {
+    public getAutoExit() {
         return process.exitCode
     }
 
@@ -51,7 +51,7 @@ class Application {
      * @param {*} $input
      * @returns {any}
      */
-    run($input: any[] = []) {
+    public run($input: any[] = []) {
         return (commander as any).parseAsync($input, {
             from: 'user'
         })
@@ -64,7 +64,7 @@ class Application {
      * @param {*} $arguments
      * @returns {any}
      */
-    call($command: any, $arguments: any[] = []) {
+    public call($command: any, $arguments: any[] = []) {
         $command = this.parseCommand($command);
         $command = $command.slice(0, 1);
         const commandArguments = $command.slice(1, $command.length)
@@ -84,7 +84,7 @@ class Application {
      * @param {*} $arguments
      * @returns {any}
      */
-    createInputFromArguments($arguments: any) {
+    public createInputFromArguments($arguments: any) {
         if (Array.isArray($arguments)) {
             return $arguments.map(arg => this.createInputFromArguments(arg))
         }
@@ -110,7 +110,7 @@ class Application {
      * callCommand method.
      * @returns {any}
      */
-    callCommand(...args: any[]) {
+    public callCommand(...args: any[]) {
         return (this.call as any)(...args)
     }
 
@@ -119,7 +119,7 @@ class Application {
      * @param {*} $command
      * @returns {any}
      */
-    has($command: any) {
+    public has($command: any) {
         return this.$commands.includes($command[0])
     }
 
@@ -128,7 +128,7 @@ class Application {
      * @param {*} $input
      * @returns {any}
      */
-    getCommandName($input: any) {
+    public getCommandName($input: any) {
         let $command = this.getCommand($input)._
         return $command.length ? $command[0] : ''
     }
@@ -137,7 +137,7 @@ class Application {
      * bootstrap method.
      * @returns {any}
      */
-    bootstrap() {
+    public bootstrap() {
         for (let $bootstrapper of Application.$bootstrappers) {
             $bootstrapper(this);
         }
@@ -148,7 +148,7 @@ class Application {
      * @param {*} $command
      * @returns {any}
      */
-    parseCommand($command: any) {
+    public parseCommand($command: any) {
         return parseArgsStringToArgv($command)
     }
 
@@ -157,7 +157,7 @@ class Application {
      * @param {*} $command
      * @returns {any}
      */
-    resolve($command: any) {
+    public resolve($command: any) {
         return this.add(this.$app.make($command));
     }
 
@@ -166,7 +166,7 @@ class Application {
      * @param {*} $commands
      * @returns {any}
      */
-    resolveCommands($commands: any) {
+    public resolveCommands($commands: any) {
 
         if (Array.isArray($commands)) {
             for (let $command of $commands) {
@@ -197,7 +197,7 @@ class Application {
      * getApp method.
      * @returns {any}
      */
-    getApp() {
+    public getApp() {
         return this.$app;
     }
 
@@ -206,7 +206,7 @@ class Application {
      * @param {*} arg
      * @returns {any}
      */
-    parseArgument(arg: any) {
+    public parseArgument(arg: any) {
         if (Array.isArray(arg)) {
             const [key, value] = arg;
             return { key, value };
@@ -226,7 +226,7 @@ class Application {
      * @param {*} command
      * @returns {any}
      */
-    add(command: any) {
+    public add(command: any) {
         if (!command || (command instanceof Command != true && typeof command.$signature !== 'string' && typeof command.$signature !== 'function')) {
             throw new Error(`Instance of [@ostro/console/command] was not available on [${command?.constructor?.name}]`)
         }
