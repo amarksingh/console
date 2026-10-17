@@ -1,4 +1,4 @@
-const _Command = require('../command');
+const _Command = require('../src/command');
 const Command = _Command.default || _Command;
 
 class TestCommand extends Command {

@@ -1,8 +1,8 @@
-const _OutputFormatterStyle = require('../outputFormatterStyle');
+const _OutputFormatterStyle = require('../src/outputFormatterStyle');
 const OutputFormatterStyle = _OutputFormatterStyle.default || _OutputFormatterStyle;
-const _OutputFormatterStyleStack = require('../outputFormatterStyleStack');
+const _OutputFormatterStyleStack = require('../src/outputFormatterStyleStack');
 const OutputFormatterStyleStack = _OutputFormatterStyleStack.default || _OutputFormatterStyleStack;
-const _OutputFormatter = require('../outputFormatter');
+const _OutputFormatter = require('../src/outputFormatter');
 const OutputFormatter = _OutputFormatter.default || _OutputFormatter;
 
 describe('OutputFormatter Unit Tests', () => {

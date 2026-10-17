@@ -15,12 +15,12 @@ module.exports = {
         ]
     },
     "moduleNameMapper": {
-        "^@ostro/support/(.*)$": "<rootDir>/../support/$1",
-        "^@ostro/support$": "<rootDir>/../support",
-        "^@ostro/contracts/(.*)$": "<rootDir>/../contracts/$1",
-        "^@ostro/contracts$": "<rootDir>/../contracts",
-        "^@ostro/console/(.*)$": "<rootDir>/$1",
-        "^@ostro/console$": "<rootDir>/application"
+        "^@ostro/support/(.*)$": "<rootDir>/../support/src/$1",
+        "^@ostro/support$": "<rootDir>/../support/src",
+        "^@ostro/contracts/(.*)$": "<rootDir>/../contracts/src/$1",
+        "^@ostro/contracts$": "<rootDir>/../contracts/src",
+        "^@ostro/console/(.*)$": "<rootDir>/src/$1",
+        "^@ostro/console$": "<rootDir>/src/application"
     },
     "collectCoverage": true,
     "coverageDirectory": "coverage",
@@ -30,7 +30,7 @@ module.exports = {
         "clover"
     ],
     "collectCoverageFrom": [
-        "<rootDir>/**/*.ts",
+        "<rootDir>/src/**/*.ts",
         "!<rootDir>/test/**",
         "!<rootDir>/coverage/**",
         "!<rootDir>/build/**",

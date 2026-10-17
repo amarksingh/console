@@ -1,6 +1,6 @@
-const _Application = require('../application');
+const _Application = require('../src/application');
 const Application = _Application.default || _Application;
-const _Command = require('../command');
+const _Command = require('../src/command');
 const Command = _Command.default || _Command;
 
 class TestAppCommand extends Command {
