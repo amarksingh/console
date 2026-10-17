@@ -1,6 +1,6 @@
 {
   "name": "@ostro/console",
-  "version": "1.0.7",
+  "version": "2.0.0-alpha.1",
   "description": "Command module for OstroJS",
   "main": "build/application.js",
   "types": "build/application.d.ts",
@@ -23,8 +23,8 @@
     "test": "npx c8 npx jest"
   },
   "dependencies": {
-    "@ostro/contracts": "^1.0.4",
-    "@ostro/support": "^1.2.1",
+    "@ostro/contracts": "^2.0.0-alpha.1",
+    "@ostro/support": "^2.0.0-alpha.1",
     "commander": "^8.3.0",
     "lodash": "^4.17.21",
     "string-argv": "^0.3.2"

@@ -1,7 +1,7 @@
 # @ostro/console — Antigravity AI Architecture & Knowledge Base
 
 > **Package Name**: `@ostro/console`
-> **Version**: `1.0.7`
+> **Version**: `2.0.0-alpha.1`
 > **Role in Ecosystem**: Modular Core Framework Library
 
 ---
